@@ -8,14 +8,14 @@ import { SITE } from "@/lib/site";
 export const metadata: Metadata = {
   metadataBase: new URL(SITE.url),
   title: {
-    default: "Robodex: every AI agent and bot Verisoul identifies",
-    template: "%s | Verisoul Robodex",
+    default: "Agent Atlas: every AI agent and bot Verisoul identifies",
+    template: "%s | Verisoul Agent Atlas",
   },
   description: SITE.description,
   openGraph: {
     type: "website",
     siteName: SITE.name,
-    title: "Verisoul Robodex",
+    title: "Verisoul Agent Atlas",
     description: SITE.description,
   },
   twitter: { card: "summary_large_image" },

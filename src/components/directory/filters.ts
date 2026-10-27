@@ -13,7 +13,7 @@ import {
   type Method,
   type Rank,
   type SignalKey,
-} from "@/lib/robodex";
+} from "@/lib/atlas";
 
 export type SortKey = "common" | "az" | "provider";
 export type MultiGroup = "commonality" | "method" | "signal";

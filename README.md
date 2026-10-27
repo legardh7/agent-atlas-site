@@ -1,15 +1,15 @@
-# Verisoul Robodex
+# Verisoul Agent Atlas
 
-Robodex is Verisoul's public directory of every AI agent, crawler and automation tool Verisoul can identify (489 today), and how we know each one. Every agent has its own page showing who runs it, what kind of agent it is, how common it is, and which of four signals (cryptographic, network, device, behavior) Verisoul uses to identify it. It is a small Next.js website that builds every page ahead of time from one data file, so it is fast, cheap to host and easy to refresh.
+Agent Atlas is Verisoul's public directory of every AI agent, crawler and automation tool Verisoul can identify (489 today), and how we know each one. Every agent has its own page showing who runs it, what kind of agent it is, how common it is, and which of four signals (cryptographic, network, device, behavior) Verisoul uses to identify it. It is a small Next.js website that builds every page ahead of time from one data file, so it is fast, cheap to host and easy to refresh.
 
 ## Where things live
 
 | Path | What it is |
 | --- | --- |
-| `src/data/robodex.json` | The data every page reads. Generated, so do not edit by hand |
-| `scripts/build-data.py` | Turns the Robodex kit's data file into `src/data/robodex.json` |
+| `src/data/agents.json` | The data every page reads. Generated, so do not edit by hand |
+| `scripts/build-data.py` | Turns the Agent Atlas kit's data file into `src/data/agents.json` |
 | `src/lib/site.ts` | Site name, public URL and every outbound link |
-| `src/lib/robodex.ts` | Labels and descriptions for types, methods, signals and commonality levels |
+| `src/lib/atlas.ts` | Labels and descriptions for types, methods, signals and commonality levels |
 | `src/app` | Pages, social images, sitemap, robots file and the JSON API |
 | `public/verisoul-logo.png` | Logo used in the header and on the social card |
 
@@ -33,16 +33,16 @@ To try the real production build locally, run `npm run build` and then `npm star
    ```bash
    git init
    git add .
-   git commit -m "Robodex"
+   git commit -m "Agent Atlas"
    git branch -M main
-   git remote add origin https://github.com/YOUR-ORG/robodex.git
+   git remote add origin https://github.com/verisoul/agent-atlas.git
    git push -u origin main
    ```
 
 2. In Vercel, click **Add New**, then **Project**
 3. Find the repo and click **Import** (if it is missing, click "Adjust GitHub App Permissions" and give Vercel access to it)
 4. Vercel detects the framework as **Next.js**. Leave the build and output settings as they are
-5. Open **Environment Variables** and add `NEXT_PUBLIC_SITE_URL` set to the final address, with no slash at the end, for example `https://robodex.verisoul.ai`
+5. Open **Environment Variables** and add `NEXT_PUBLIC_SITE_URL` set to the final address, with no slash at the end, for example `https://atlas.verisoul.ai`
 6. Click **Deploy**. The first build takes a few minutes because it draws a social image for every agent
 7. From then on, every push to `main` deploys on its own, and every other branch gets its own preview link
 
@@ -50,24 +50,24 @@ To try the real production build locally, run `npm run build` and then `npm star
 
 ### Custom domain
 
-Use a subdomain such as `robodex.verisoul.ai`:
+Use a subdomain such as `atlas.verisoul.ai`:
 
-1. In the Vercel project, open **Settings**, then **Domains**, and add `robodex.verisoul.ai`
-2. At the DNS provider for verisoul.ai, add a **CNAME** record with the name `robodex` and the value `cname.vercel-dns.com`
+1. In the Vercel project, open **Settings**, then **Domains**, and add `atlas.verisoul.ai`
+2. At the DNS provider for verisoul.ai, add a **CNAME** record with the name `atlas` and the value `cname.vercel-dns.com`
 3. Wait for Vercel to show the domain as valid (usually a few minutes). It sets up HTTPS by itself
 4. Check that `NEXT_PUBLIC_SITE_URL` matches the domain, and redeploy if you changed it
 
-Why not `verisoul.ai/robodex`? The main site runs on Webflow, and Webflow cannot hand one path to another app. Serving Robodex there would need a proxy in front of Webflow (for example Cloudflare) that sends `/robodex` to Vercel and everything else to Webflow, plus a `basePath: "/robodex"` setting in `next.config.mjs`. A subdomain needs one DNS record and nothing else, so it is the simpler place to start.
+Why not `verisoul.ai/atlas`? The main site runs on Webflow, and Webflow cannot hand one path to another app. Serving Agent Atlas there would need a proxy in front of Webflow (for example Cloudflare) that sends `/robodex` to Vercel and everything else to Webflow, plus a `basePath: "/robodex"` setting in `next.config.mjs`. A subdomain needs one DNS record and nothing else, so it is the simpler place to start.
 
 ## Update the data
 
-Every page, the sitemap, the social images and the API read from `src/data/robodex.json`. That file is generated from the Robodex kit's `robodex.json`:
+Every page, the sitemap, the social images and the API read from `src/data/agents.json`. That file is generated from the Agent Atlas kit's `robodex.json`:
 
 ```bash
-python3 scripts/build-data.py <kit robodex.json> src/data/robodex.json
+python3 scripts/build-data.py <kit robodex.json> src/data/agents.json
 ```
 
-For example `python3 scripts/build-data.py ../robodex-kit/data/robodex.json src/data/robodex.json`. The script prints the number of rows and the new counts. Commit and push the result, and Vercel rebuilds every page, the sitemap and the social images on deploy.
+For example `python3 scripts/build-data.py ../robodex-kit/data/robodex.json src/data/agents.json`. The script prints the number of rows and the new counts. Commit and push the result, and Vercel rebuilds every page, the sitemap and the social images on deploy.
 
 What the script does:
 
@@ -83,7 +83,7 @@ Three dates are set by hand, so update them on each refresh:
 - The month in the evidence line (`"in September 2026, per Cloudflare Radar"`), also in `scripts/build-data.py`
 - `LAST_MODIFIED` in `src/app/sitemap.ts`
 
-### Fields in `src/data/robodex.json`
+### Fields in `src/data/agents.json`
 
 The file has `updated`, `counts` (totals by method, commonality, type and signal), `logos` (SVG path data on a 24 by 24 grid plus a brand color) and `agents`. Each agent has:
 
@@ -133,7 +133,7 @@ A self-declared agent always has at least one of network, device or behavior lit
       "name": "Amazonbot",
       "commonality": "Very common",
       "signals": { "cryptographic": false, "network": true, "device": false, "behavior": false },
-      "url": "https://robodex.verisoul.ai/agents/amazonbot"
+      "url": "https://atlas.verisoul.ai/agents/amazonbot"
     }
   ]
 }

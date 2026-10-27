@@ -1,8 +1,8 @@
 import type { MetadataRoute } from "next";
-import { AGENTS } from "@/lib/robodex";
+import { AGENTS } from "@/lib/atlas";
 import { SITE } from "@/lib/site";
 
-/** Date the directory data was last refreshed; bump it when robodex.json changes */
+/** Date the directory data was last refreshed; bump it when agents.json changes */
 const LAST_MODIFIED = "2026-10-26";
 
 export default function sitemap(): MetadataRoute.Sitemap {

@@ -1,5 +1,5 @@
 import { Icon } from "./Icon";
-import { LOGOS, SIGNALS, levelInfo, methodInfo, typeInfo, type Agent, type AgentType, type Method, type Rank } from "@/lib/robodex";
+import { LOGOS, SIGNALS, levelInfo, methodInfo, typeInfo, type Agent, type AgentType, type Method, type Rank } from "@/lib/atlas";
 
 /** Company logo (monochrome, brand color on hover via .has-brand) or a monogram tile */
 export function LogoTile({ agent, size = 36 }: { agent: Agent; size?: number }) {

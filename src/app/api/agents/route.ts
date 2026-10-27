@@ -1,4 +1,4 @@
-import { AGENTS, TOTAL_AGENTS, UPDATED, levelInfo } from "@/lib/robodex";
+import { AGENTS, TOTAL_AGENTS, UPDATED, levelInfo } from "@/lib/atlas";
 import { SITE } from "@/lib/site";
 
 /** Built once at deploy time and served as a static file */

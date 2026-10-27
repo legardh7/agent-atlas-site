@@ -18,7 +18,7 @@ import {
   type Agent,
   type AgentType,
   type Rank,
-} from "@/lib/robodex";
+} from "@/lib/atlas";
 import {
   EMPTY_FILTERS,
   METHOD_ORDER,

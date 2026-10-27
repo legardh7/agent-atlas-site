@@ -1,4 +1,4 @@
-import raw from "@/data/robodex.json";
+import raw from "@/data/agents.json";
 import type { IconName } from "./icons";
 
 export type AgentType = "AI agent" | "AI assistant" | "AI crawler" | "Crawler" | "Headless automation" | "Other";
@@ -40,7 +40,7 @@ export interface Logo {
   color: string;
 }
 
-interface RobodexData {
+interface AtlasData {
   updated: string;
   counts: {
     agents: number;
@@ -53,7 +53,7 @@ interface RobodexData {
   agents: Agent[];
 }
 
-const data = raw as unknown as RobodexData;
+const data = raw as unknown as AtlasData;
 
 export const AGENTS: Agent[] = data.agents;
 export const LOGOS: Record<string, Logo> = data.logos;

@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import { Icon } from "@/components/Icon";
 import { LogoTile, MethodPill, Meter } from "@/components/AgentBits";
 import { CopyButton } from "@/components/CopyButton";
-import { AGENTS, SIGNALS, agentsFromProvider, brandVars, getAgent, levelInfo, typeInfo, type Agent, type SignalKey } from "@/lib/robodex";
+import { AGENTS, SIGNALS, agentsFromProvider, brandVars, getAgent, levelInfo, typeInfo, type Agent, type SignalKey } from "@/lib/atlas";
 import { SITE } from "@/lib/site";
 import styles from "./agent.module.css";
 

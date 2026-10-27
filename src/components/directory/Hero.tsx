@@ -1,5 +1,5 @@
 import { Icon } from "@/components/Icon";
-import { COUNTS, TOTAL_AGENTS, TYPES, UPDATED, typeInfo, type AgentType } from "@/lib/robodex";
+import { COUNTS, TOTAL_AGENTS, TYPES, UPDATED, typeInfo, type AgentType } from "@/lib/atlas";
 import styles from "./Directory.module.css";
 
 const STATS = [
@@ -15,10 +15,10 @@ const STATS = [
  */
 export function Hero({ activeType, onSelectType }: { activeType: AgentType | null; onSelectType?: (type: AgentType) => void }) {
   return (
-    <section className={`container ${styles.hero}`} aria-labelledby="robodex-title">
+    <section className={`container ${styles.hero}`} aria-labelledby="atlas-title">
       <div className={styles.heroMain}>
-        <h1 id="robodex-title" className={styles.title}>
-          Robodex
+        <h1 id="atlas-title" className={styles.title}>
+          Agent Atlas
         </h1>
         <p className={styles.subtitle}>Every AI agent, crawler and automation tool Verisoul can identify, and how we know.</p>
         <dl className={styles.stats}>

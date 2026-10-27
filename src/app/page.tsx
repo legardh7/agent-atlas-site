@@ -3,7 +3,7 @@ import { Suspense } from "react";
 import { Directory, DirectoryFallback } from "@/components/directory/Directory";
 
 export const metadata: Metadata = {
-  title: { absolute: "Robodex: every AI agent and bot Verisoul identifies" },
+  title: { absolute: "Agent Atlas: every AI agent and bot Verisoul identifies" },
   alternates: { canonical: "/" },
 };
 

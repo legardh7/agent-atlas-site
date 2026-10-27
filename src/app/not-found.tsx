@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Icon } from "@/components/Icon";
-import { TOTAL_AGENTS } from "@/lib/robodex";
+import { TOTAL_AGENTS } from "@/lib/atlas";
 import { SITE } from "@/lib/site";
 
 export const metadata: Metadata = {

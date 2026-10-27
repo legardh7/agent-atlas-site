@@ -1,9 +1,9 @@
 import { ImageResponse } from "next/og";
 import { ICONS, type IconName } from "@/lib/icons";
-import { AGENTS, LOGOS, SIGNALS, getAgent, levelInfo, methodInfo, typeInfo, type Agent } from "@/lib/robodex";
+import { AGENTS, LOGOS, SIGNALS, getAgent, levelInfo, methodInfo, typeInfo, type Agent } from "@/lib/atlas";
 import { SITE } from "@/lib/site";
 
-export const alt = "Verisoul Robodex card: who runs this agent, what kind it is, how common it is and which signals Verisoul uses to identify it";
+export const alt = "Verisoul Agent Atlas card: who runs this agent, what kind it is, how common it is and which signals Verisoul uses to identify it";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -132,7 +132,7 @@ export default async function Image({ params }: { params: Promise<{ slug: string
         <div style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "space-between", padding: "46px 72px 50px" }}>
           {/* Top line */}
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", fontSize: 24 }}>
-            <div style={{ display: "flex", color: NAVY, ...bold(0.8, NAVY) }}>Verisoul Robodex</div>
+            <div style={{ display: "flex", color: NAVY, ...bold(0.8, NAVY) }}>Verisoul Agent Atlas</div>
             <div style={{ display: "flex", color: MUTED }}>{host}</div>
           </div>
 

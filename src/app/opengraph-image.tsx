@@ -1,10 +1,10 @@
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 import { ImageResponse } from "next/og";
-import { COUNTS, TOTAL_AGENTS } from "@/lib/robodex";
+import { COUNTS, TOTAL_AGENTS } from "@/lib/atlas";
 import { SITE } from "@/lib/site";
 
-export const alt = "Verisoul Robodex: every AI agent, crawler and automation tool Verisoul can identify, and how we know";
+export const alt = "Verisoul Agent Atlas: every AI agent, crawler and automation tool Verisoul can identify, and how we know";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -49,7 +49,7 @@ export default async function Image() {
             ) : (
               <div style={{ fontSize: 34, ...bold(1, NAVY) }}>verisoul</div>
             )}
-            <div style={{ marginTop: 34, fontSize: 132, lineHeight: 1, letterSpacing: -2, ...bold(5, NAVY) }}>Robodex</div>
+            <div style={{ marginTop: 34, fontSize: 132, lineHeight: 1, letterSpacing: -2, ...bold(5, NAVY) }}>Agent Atlas</div>
             <div style={{ marginTop: 30, fontSize: 38, lineHeight: 1.32, color: MUTED, maxWidth: 960 }}>{SITE.description}</div>
           </div>
 

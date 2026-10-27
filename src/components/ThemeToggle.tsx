@@ -16,7 +16,7 @@ export function ThemeToggle() {
     setTheme(next);
     document.documentElement.dataset.theme = next;
     try {
-      localStorage.setItem("robodex-theme", next);
+      localStorage.setItem("agent-atlas-theme", next);
     } catch {}
   }
 
@@ -45,4 +45,4 @@ export function ThemeToggle() {
 }
 
 /** Runs before paint so a saved dark choice never flashes light */
-export const themeInitScript = `(function(){try{var t=localStorage.getItem("robodex-theme");if(t==="dark"){document.documentElement.dataset.theme="dark";}}catch(e){}})();`;
+export const themeInitScript = `(function(){try{var t=localStorage.getItem("agent-atlas-theme");if(t==="dark"){document.documentElement.dataset.theme="dark";}}catch(e){}})();`;

@@ -1,6 +1,6 @@
 import { Icon } from "./Icon";
 import { Meter } from "./AgentBits";
-import { LEVELS, METHODS, SIGNALS, TOTAL_AGENTS } from "@/lib/robodex";
+import { LEVELS, METHODS, SIGNALS, TOTAL_AGENTS } from "@/lib/atlas";
 import { SITE } from "@/lib/site";
 import Link from "next/link";
 
