@@ -42,7 +42,7 @@ To try the real production build locally, run `npm run build` and then `npm star
 2. In Vercel, click **Add New**, then **Project**
 3. Find the repo and click **Import** (if it is missing, click "Adjust GitHub App Permissions" and give Vercel access to it)
 4. Vercel detects the framework as **Next.js**. Leave the build and output settings as they are
-5. Open **Environment Variables** and add `NEXT_PUBLIC_SITE_URL` set to the final address, with no slash at the end, for example `https://atlas.verisoul.ai`
+5. Open **Environment Variables** and add `NEXT_PUBLIC_SITE_URL` set to the final address, with no slash at the end, for example `https://agents.verisoul.ai`
 6. Click **Deploy**. The first build takes a few minutes because it draws a social image for every agent
 7. From then on, every push to `main` deploys on its own, and every other branch gets its own preview link
 
@@ -50,14 +50,14 @@ To try the real production build locally, run `npm run build` and then `npm star
 
 ### Custom domain
 
-Use a subdomain such as `atlas.verisoul.ai`:
+Use a subdomain such as `agents.verisoul.ai`:
 
-1. In the Vercel project, open **Settings**, then **Domains**, and add `atlas.verisoul.ai`
-2. At the DNS provider for verisoul.ai, add a **CNAME** record with the name `atlas` and the value `cname.vercel-dns.com`
+1. In the Vercel project, open **Settings**, then **Domains**, and add `agents.verisoul.ai`
+2. At the DNS provider for verisoul.ai, add a **CNAME** record with the name `agents` and the value `cname.vercel-dns.com`
 3. Wait for Vercel to show the domain as valid (usually a few minutes). It sets up HTTPS by itself
 4. Check that `NEXT_PUBLIC_SITE_URL` matches the domain, and redeploy if you changed it
 
-Why not `verisoul.ai/atlas`? The main site runs on Webflow, and Webflow cannot hand one path to another app. Serving Agent Atlas there would need a proxy in front of Webflow (for example Cloudflare) that sends `/robodex` to Vercel and everything else to Webflow, plus a `basePath: "/robodex"` setting in `next.config.mjs`. A subdomain needs one DNS record and nothing else, so it is the simpler place to start.
+Why not `verisoul.ai/agents`? The main site runs on Webflow, and Webflow cannot hand one path to another app. Serving Agent Atlas there would need a proxy in front of Webflow (for example Cloudflare) that sends `/robodex` to Vercel and everything else to Webflow, plus a `basePath: "/robodex"` setting in `next.config.mjs`. A subdomain needs one DNS record and nothing else, so it is the simpler place to start.
 
 ## Update the data
 
@@ -150,7 +150,7 @@ A self-declared agent always has at least one of network, device or behavior lit
       "name": "Amazonbot",
       "commonality": "Very common",
       "signals": { "cryptographic": false, "network": true, "device": false, "behavior": false },
-      "url": "https://atlas.verisoul.ai/agents/amazonbot"
+      "url": "https://agents.verisoul.ai/agents/amazonbot"
     }
   ]
 }
