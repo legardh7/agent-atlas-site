@@ -57,7 +57,7 @@ Use a subdomain such as `agents.verisoul.ai`:
 3. Wait for Vercel to show the domain as valid (usually a few minutes). It sets up HTTPS by itself
 4. Check that `NEXT_PUBLIC_SITE_URL` matches the domain, and redeploy if you changed it
 
-Why not `verisoul.ai/agents`? The main site runs on Webflow, and Webflow cannot hand one path to another app. Serving Agent Atlas there would need a proxy in front of Webflow (for example Cloudflare) that sends `/robodex` to Vercel and everything else to Webflow, plus a `basePath: "/robodex"` setting in `next.config.mjs`. A subdomain needs one DNS record and nothing else, so it is the simpler place to start.
+Why not `verisoul.ai/agents`? The main site runs on Webflow, and Webflow cannot hand one path to another app. Serving Agent Atlas there would need a proxy in front of Webflow (for example Cloudflare) that sends `/agents` to Vercel and everything else to Webflow, plus a `basePath: "/agents"` setting in `next.config.mjs`. A subdomain needs one DNS record and nothing else, so it is the simpler place to start.
 
 ## Update the data
 
