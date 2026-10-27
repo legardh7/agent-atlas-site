@@ -65,6 +65,7 @@ Every page, the sitemap, the social images and the API read from `src/data/agent
 
 ```bash
 python3 scripts/build-data.py <kit robodex.json> src/data/agents.json
+node scripts/build-logos.mjs
 ```
 
 For example `python3 scripts/build-data.py ../robodex-kit/data/robodex.json src/data/agents.json`. The script prints the number of rows and the new counts. Commit and push the result, and Vercel rebuilds every page, the sitemap and the social images on deploy.
@@ -104,6 +105,22 @@ The file has `updated`, `counts` (totals by method, commonality, type and signal
 | `variants`, `count` | Regional variants for a family row, and how many agents the row stands for |
 | `evidence` | Public source for the commonality rating, when there is one |
 | `order` | Default sort order, most common first |
+
+
+### Logos
+
+Logos are real brand files from open icon sets (Lobe Icons, Iconify "logos" and Simple Icons), stored in `public/logos`. Which logo each agent shows is set in `src/data/logo-map.json`:
+
+- `byAgent`: a product logo for one agent (for example Gemini for Google Agent), using its `identified_agent` value
+- `byProvider`: the company logo for every agent that company runs
+- `domains`: the company's website, for companies with no logo file; the site then shows that website's icon, and falls back to initials when there isn't one
+
+After changing the map, or after a data refresh, rebuild the logos:
+
+```
+npm i --no-save @lobehub/icons-static-svg @iconify-json/logos @iconify-json/simple-icons simple-icons
+node scripts/build-logos.mjs
+```
 
 ## How the four signals are assigned
 

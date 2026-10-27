@@ -704,13 +704,67 @@
 
 .list {
   min-width: 0;
+  overflow-x: auto;
 }
 
 .grid {
   display: grid;
-  grid-template-columns: minmax(220px, 1.25fr) minmax(0, 1.9fr) 168px 150px 138px 168px 20px;
+  /* Widths come from Columns.tsx (people can drag them); "What it does" takes any spare room */
+  grid-template-columns: var(--c-agent, 220px) minmax(var(--c-desc, 240px), 1fr) var(--c-type, 168px) var(--c-method, 140px) var(--c-sig, 136px) var(--c-comm, 150px) 20px;
   align-items: center;
-  column-gap: 20px;
+  column-gap: 16px;
+  /* Every row shares one width, so columns line up; wider than the page scrolls sideways */
+  min-width: calc(var(--c-agent, 220px) + var(--c-desc, 240px) + var(--c-type, 168px) + var(--c-method, 140px) + var(--c-sig, 136px) + var(--c-comm, 150px) + 20px + 6 * 16px + 32px);
+}
+
+.headCell {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-height: 20px;
+}
+
+.headLabel {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Drag handle sits in the gap to the right of each header cell */
+.resizer {
+  position: absolute;
+  top: -6px;
+  bottom: -11px;
+  right: -13px;
+  width: 10px;
+  cursor: col-resize;
+  touch-action: none;
+  z-index: 2;
+  display: flex;
+  justify-content: center;
+}
+
+.resizer::after {
+  content: "";
+  width: 2px;
+  height: 100%;
+  border-radius: 2px;
+  background: var(--line);
+  transition: background-color 0.12s ease;
+}
+
+.resizer:hover::after,
+.resizer:focus-visible::after,
+.resizerActive::after {
+  background: var(--blue);
+}
+
+.resizer:focus-visible {
+  outline: none;
+}
+
+.resetCols {
+  margin-left: auto;
 }
 
 .head {
@@ -807,10 +861,12 @@
 
 .cellDesc {
   font-size: 14px;
+  line-height: 1.45;
   color: var(--muted);
-  white-space: nowrap;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
   overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 .cellFlex {
@@ -1063,12 +1119,22 @@
 
 /* ---------- Breakpoints ---------- */
 
+@media (max-width: 1100px) {
+  .resizer,
+  .resetCols {
+    display: none;
+  }
+}
+
 @media (max-width: 1200px) {
   .colDesc {
     display: none;
   }
   .grid {
-    grid-template-columns: minmax(220px, 1.5fr) 160px 146px 138px 164px 20px;
+    min-width: 0;
+  }
+  .grid {
+    grid-template-columns: minmax(var(--c-agent, 220px), 1fr) var(--c-type, 168px) var(--c-method, 140px) var(--c-sig, 136px) var(--c-comm, 150px) 20px;
   }
 }
 

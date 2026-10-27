@@ -1,24 +1,7 @@
 import { Icon } from "./Icon";
-import { LOGOS, SIGNALS, levelInfo, methodInfo, typeInfo, type Agent, type AgentType, type Method, type Rank } from "@/lib/atlas";
+import { SIGNALS, levelInfo, methodInfo, typeInfo, type Agent, type AgentType, type Method, type Rank } from "@/lib/atlas";
 
-/** Company logo (monochrome, brand color on hover via .has-brand) or a monogram tile */
-export function LogoTile({ agent, size = 36 }: { agent: Agent; size?: number }) {
-  const logo = agent.logo ? LOGOS[agent.logo] : null;
-  const glyph = Math.round(size * 0.5);
-  return (
-    <span className="logo-tile" style={{ width: size, height: size, borderRadius: Math.round(size / 4) }} aria-hidden="true">
-      {logo ? (
-        <svg viewBox="0 0 24 24" width={glyph} height={glyph} fill="currentColor" focusable="false">
-          <path d={logo.d} />
-        </svg>
-      ) : (
-        <span className="monogram" style={{ fontSize: Math.max(11, Math.round(size / 3)) }}>
-          {agent.monogram}
-        </span>
-      )}
-    </span>
-  );
-}
+export { LogoTile } from "./LogoTile";
 
 export function MethodPill({ method, outline = false }: { method: Method; outline?: boolean }) {
   const info = methodInfo(method);

@@ -12,7 +12,6 @@ import {
   SIGNALS,
   TOTAL_AGENTS,
   TYPES,
-  brandVars,
   levelInfo,
   methodInfo,
   type Agent,
@@ -36,6 +35,7 @@ import {
   type SortKey,
 } from "./filters";
 import { Hero } from "./Hero";
+import { ColumnHeader, useColumnWidths } from "./Columns";
 import styles from "./Directory.module.css";
 
 const PAGE = 40;
@@ -48,6 +48,7 @@ export function Directory() {
   const [filters, setFilters] = useState<Filters>(() => parseFilters(params));
   const [limit, setLimit] = useState(PAGE);
   const [open, setOpen] = useState<string | null>(null);
+  const cols = useColumnWidths();
   const lastWritten = useRef<string>(serializeFilters(parseFilters(params)));
 
   // Follow outside URL changes (back/forward, links like /?type=crawler)
@@ -131,18 +132,15 @@ export function Directory() {
                 Clear all
               </button>
             )}
+            {cols.changed && (
+              <button type="button" className={`${styles.clearAll} ${styles.resetCols}`} onClick={cols.reset}>
+                Reset columns
+              </button>
+            )}
           </div>
 
-          <div className={styles.list}>
-            <div className={`${styles.grid} ${styles.head}`} aria-hidden="true">
-              <span className={styles.colAgent}>Agent</span>
-              <span className={styles.colDesc}>What it does</span>
-              <span className={styles.colType}>Type</span>
-              <span className={styles.colMethod}>Method</span>
-              <span className={styles.colSig}>Signals</span>
-              <span className={styles.colComm}>Commonality</span>
-              <span className={styles.colChev} />
-            </div>
+          <div className={styles.list} style={cols.style}>
+            <ColumnHeader widths={cols.widths} setWidth={cols.setWidth} />
             <ul style={{ listStyle: "none", margin: 0, padding: 0 }} aria-label="Agents">
               {shown.map((a) => (
                 <AgentRow key={a.slug} agent={a} open={open === a.slug} onToggle={() => setOpen(open === a.slug ? null : a.slug)} />
@@ -437,7 +435,7 @@ function AgentRow({ agent: a, open, onToggle }: { agent: Agent; open: boolean; o
   const panelId = useId();
   const lit = SIGNALS.filter((s) => a.signals[s.key]);
   return (
-    <li className={`${styles.item} has-brand`} style={brandVars(a) as React.CSSProperties}>
+    <li className={styles.item}>
       <button
         type="button"
         className={`${styles.row} ${styles.grid}${open ? ` ${styles.rowOpen}` : ""}`}

@@ -16,6 +16,8 @@
   --blue-line: #c7d7fe;
   --off: #cfd5df;
   --tile: #f2f4f8;
+  --logo-tile: #f5f7fa;
+  --logo-tile-line: #e9ecf1;
   --expand: #fafbfe;
   --seg: #e2e5ea;
   --sig-bg: #e9effc;
@@ -46,6 +48,8 @@
   --blue-line: #2a3f6e;
   --off: #2f3b54;
   --tile: #17223a;
+  --logo-tile: #eef2f8;
+  --logo-tile-line: #eef2f8;
   --expand: #0e1728;
   --seg: #26324d;
   --sig-bg: #1b2b50;
@@ -157,12 +161,10 @@ p {
   letter-spacing: 0.02em;
 }
 
-/* Logos switch to their brand color when the row or card around them is hovered */
-.has-brand:hover .logo-tile {
-  color: var(--brand-light, var(--fg));
-}
-:root[data-theme="dark"] .has-brand:hover .logo-tile {
-  color: var(--brand-dark, var(--fg));
+/* Logos keep their real colors, so their tile stays light in both themes */
+.logo-tile.has-logo {
+  background: var(--logo-tile);
+  box-shadow: inset 0 0 0 1px var(--logo-tile-line);
 }
 
 .pill {

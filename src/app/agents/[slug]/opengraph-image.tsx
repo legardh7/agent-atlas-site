@@ -1,3 +1,5 @@
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
 import { ImageResponse } from "next/og";
 import { ICONS, type IconName } from "@/lib/icons";
 import { AGENTS, LOGOS, SIGNALS, getAgent, levelInfo, methodInfo, typeInfo, type Agent } from "@/lib/atlas";
@@ -56,8 +58,20 @@ function StrokeIcon({ name, size, color }: { name: IconName; size: number; color
   );
 }
 
-function LogoTile({ agent }: { agent: Agent }) {
+/** The agent's full-color logo file as a data URI (Satori draws it like any image) */
+function logoDataUri(agent: Agent): string | null {
   const logo = agent.logo ? LOGOS[agent.logo] : null;
+  if (!logo) return null;
+  try {
+    const svg = readFileSync(join(process.cwd(), "public", logo.src));
+    return `data:image/svg+xml;base64,${svg.toString("base64")}`;
+  } catch {
+    return null;
+  }
+}
+
+function LogoTile({ agent }: { agent: Agent }) {
+  const logo = logoDataUri(agent);
   return (
     <div
       style={{
@@ -72,9 +86,8 @@ function LogoTile({ agent }: { agent: Agent }) {
       }}
     >
       {logo ? (
-        <svg viewBox="0 0 24 24" width={68} height={68} fill={NAVY}>
-          <path d={logo.d} />
-        </svg>
+        // eslint-disable-next-line @next/next/no-img-element, jsx-a11y/alt-text
+        <img src={logo} width={72} height={72} style={{ objectFit: "contain" }} />
       ) : (
         <div style={{ display: "flex", fontSize: 50, color: MUTED, letterSpacing: 1, ...bold(1.6, MUTED) }}>
           {agent.monogram ?? agent.name.slice(0, 1).toUpperCase()}

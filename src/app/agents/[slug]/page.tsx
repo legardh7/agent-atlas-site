@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import { Icon } from "@/components/Icon";
 import { LogoTile, MethodPill, Meter } from "@/components/AgentBits";
 import { CopyButton } from "@/components/CopyButton";
-import { AGENTS, SIGNALS, agentsFromProvider, brandVars, getAgent, levelInfo, typeInfo, type Agent, type SignalKey } from "@/lib/atlas";
+import { AGENTS, SIGNALS, agentsFromProvider, getAgent, levelInfo, typeInfo, type Agent, type SignalKey } from "@/lib/atlas";
 import { SITE } from "@/lib/site";
 import styles from "./agent.module.css";
 
@@ -59,7 +59,7 @@ export default async function AgentPage({ params }: Props) {
       </Link>
 
       <section className={styles.hero} aria-labelledby="agent-name">
-        <span className={`has-brand ${styles.logo}`} style={brandVars(agent) as React.CSSProperties}>
+        <span className={styles.logo}>
           <LogoTile agent={agent} size={72} />
         </span>
         <div className={styles.heroText}>

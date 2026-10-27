@@ -36,8 +36,10 @@ export interface Agent {
 }
 
 export interface Logo {
-  d: string;
-  color: string;
+  /** Path of the full-color SVG under /public */
+  src: string;
+  /** True for black or near-black marks */
+  dark: boolean;
 }
 
 interface AtlasData {
@@ -118,31 +120,7 @@ export function searchText(a: Agent): string {
   return [a.name, a.provider, a.id, a.description, ...a.aliases, ...(a.variants ?? [])].join(" ").toLowerCase();
 }
 
-function luminance(hex: string): number {
-  let h = hex.replace("#", "");
-  if (h.length === 3) h = h.split("").map((c) => c + c).join("");
-  const [r, g, b] = [0, 2, 4].map((i) => {
-    const c = parseInt(h.slice(i, i + 2), 16) / 255;
-    return c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
-  });
-  return 0.2126 * r + 0.7152 * g + 0.0722 * b;
-}
-
-function contrast(a: string, b: string): number {
-  const x = luminance(a);
-  const y = luminance(b);
-  return (Math.max(x, y) + 0.05) / (Math.min(x, y) + 0.05);
-}
-
-/**
- * CSS custom properties for a logo's hover color: the brand color where it still reads
- * on that theme's background (3:1), otherwise the text color.
- */
-export function brandVars(agent: Agent): Record<string, string> {
-  const logo = agent.logo ? LOGOS[agent.logo] : null;
-  if (!logo) return {};
-  const vars: Record<string, string> = {};
-  if (contrast(logo.color, "#ffffff") >= 3) vars["--brand-light"] = logo.color;
-  if (contrast(logo.color, "#0b1220") >= 3) vars["--brand-dark"] = logo.color;
-  return vars;
+/** Website icon for agents whose company has no logo file (falls back to the monogram) */
+export function siteIcon(agent: Agent): string | null {
+  return agent.providerDomain ? `https://www.google.com/s2/favicons?domain=${encodeURIComponent(agent.providerDomain)}&sz=64` : null;
 }
