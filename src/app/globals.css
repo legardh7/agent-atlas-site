@@ -1,0 +1,307 @@
+/* Verisoul Robodex: theme tokens and shared pieces.
+   Brand: Plus Jakarta Sans, one blue accent (#2160fd), navy text (#0f1e3d), panel (#f3f8ff). */
+
+:root {
+  --bg: #ffffff;
+  --fg: #0f1e3d;
+  --muted: #6b7280;
+  --faint: #9ca3af;
+  --line: #e5e7eb;
+  --line-soft: #eef0f4;
+  --panel: #f3f8ff;
+  --chip: #f7f8fa;
+  --hover: #f8faff;
+  --blue: #2160fd;
+  --blue-text: #2160fd;
+  --blue-line: #c7d7fe;
+  --off: #cfd5df;
+  --tile: #f2f4f8;
+  --expand: #fafbfe;
+  --seg: #e2e5ea;
+  --sig-bg: #e9effc;
+  --foot: #f7f8fa;
+  --cta: #0f1e3d;
+  --code: #0f1e3d;
+  --logo-filter: none;
+  --shadow-pop: 0 12px 32px rgba(15, 30, 61, 0.12), 0 2px 6px rgba(15, 30, 61, 0.06);
+  --font-sans: "Plus Jakarta Sans", Inter, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --container: 1280px;
+  --gutter: 32px;
+  color-scheme: light;
+}
+
+:root[data-theme="dark"] {
+  --bg: #0b1220;
+  --fg: #e6ecf7;
+  --muted: #9aa6bd;
+  --faint: #6b7891;
+  --line: #1e2942;
+  --line-soft: #172138;
+  --panel: #13213f;
+  --chip: #111a2e;
+  --hover: #0f1930;
+  --blue: #5b8bff;
+  --blue-text: #8cb0ff;
+  --blue-line: #2a3f6e;
+  --off: #2f3b54;
+  --tile: #17223a;
+  --expand: #0e1728;
+  --seg: #26324d;
+  --sig-bg: #1b2b50;
+  --foot: #0e1626;
+  --cta: #14213f;
+  --code: #060b16;
+  --logo-filter: brightness(0) invert(1);
+  --shadow-pop: 0 12px 32px rgba(0, 0, 0, 0.45);
+  color-scheme: dark;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-sans);
+  font-size: 15px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  color: var(--blue-text);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: none;
+  opacity: 0.88;
+}
+
+button,
+input,
+select {
+  font: inherit;
+  color: inherit;
+}
+
+h1,
+h2,
+h3,
+p {
+  margin: 0;
+}
+
+:focus-visible {
+  outline: 2px solid var(--blue);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.container {
+  max-width: var(--container);
+  margin: 0 auto;
+  padding-left: var(--gutter);
+  padding-right: var(--gutter);
+}
+
+@media (max-width: 560px) {
+  :root {
+    --gutter: 16px;
+  }
+}
+
+.mono {
+  font-family: var(--font-mono);
+}
+
+.tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- Shared agent pieces (see components/AgentBits.tsx) ---------- */
+
+.logo-tile {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9px;
+  background: var(--tile);
+  color: var(--fg);
+  transition: color 0.12s ease;
+}
+
+.logo-tile .monogram {
+  font-weight: 700;
+  color: var(--muted);
+  letter-spacing: 0.02em;
+}
+
+/* Logos switch to their brand color when the row or card around them is hovered */
+.has-brand:hover .logo-tile {
+  color: var(--brand-light, var(--fg));
+}
+:root[data-theme="dark"] .has-brand:hover .logo-tile {
+  color: var(--brand-dark, var(--fg));
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 28px;
+  padding: 0 10px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+  background: var(--chip);
+  color: var(--fg);
+}
+
+.pill.signed {
+  background: var(--panel);
+  color: var(--blue-text);
+}
+
+.pill.outline {
+  border: 1px solid var(--line);
+}
+
+.signal-slots {
+  display: flex;
+  gap: 4px;
+}
+
+.signal-slot {
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--off);
+}
+
+.signal-slot.on {
+  background: var(--sig-bg);
+  color: var(--fg);
+}
+
+.meter {
+  display: inline-flex;
+  gap: 3px;
+  flex: none;
+}
+
+.meter span {
+  width: 10px;
+  height: 6px;
+  border-radius: 2px;
+  background: var(--seg);
+}
+
+.meter span.on {
+  background: var(--blue);
+}
+
+.meter.tall span {
+  width: 5px;
+  height: 10px;
+  border-radius: 1.5px;
+}
+
+.meter.big span {
+  width: 22px;
+  height: 10px;
+  border-radius: 3px;
+}
+
+.code-chip {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--code);
+  border-radius: 10px;
+  padding: 10px 10px 10px 16px;
+}
+
+.code-chip code {
+  flex: 1;
+  min-width: 0;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  line-height: 1.5;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: #ffffff;
+}
+
+.code-chip .key {
+  color: #8cb0ff;
+}
+
+.copy-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 30px;
+  padding: 0 10px;
+  border-radius: 7px;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  background: transparent;
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.copy-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 42px;
+  padding: 0 18px;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: var(--bg);
+  color: var(--fg);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn:hover {
+  border-color: var(--faint);
+}
+
+.btn.primary {
+  background: var(--fg);
+  color: var(--bg);
+  border-color: var(--fg);
+}
