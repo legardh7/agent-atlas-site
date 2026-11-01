@@ -496,17 +496,6 @@ function AgentRow({ agent: a, open, onToggle }: { agent: Agent; open: boolean; o
                   </span>
                 </li>
               ))}
-              {a.declaresUserAgent && (
-                <li className={styles.howItem}>
-                  <span className={`${styles.howIcon} ${styles.howIconMuted}`}>
-                    <Icon name="idcard" size={16} />
-                  </span>
-                  <span className={styles.howText}>
-                    <strong>User agent</strong>
-                    Names itself in its user agent, which we never trust on its own
-                  </span>
-                </li>
-              )}
             </ul>
           </div>
           <div className={styles.panelColApi}>

@@ -71,7 +71,9 @@ export function howCommon(agent: Agent): string {
 
 /** "source IP confirmed as the operator's own network; cloud-hosted browser ..." */
 function signalPhrases(agent: Agent): string {
-  const parts = ORDER.filter((k) => k !== "cryptographic" && agent.signals[k]).map((k) => {
+  // The user agent is already named in the sentence, so the device line would repeat it
+  const skipDevice = agent.declaresUserAgent || agent.method === "Self-declared";
+  const parts = ORDER.filter((k) => k !== "cryptographic" && agent.signals[k] && !(k === "device" && skipDevice)).map((k) => {
     const detail = agent.signalDetails[k] ?? SIGNALS.find((s) => s.key === k)!.meaning;
     return lowerFirst(detail.replace(/[.\s]+$/, ""));
   });

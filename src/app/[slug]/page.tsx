@@ -9,7 +9,7 @@ import { SITE, abs } from "@/lib/site";
 import { canBeFaked, howCommon, howToDetect, identifiesItself, whatItIs } from "@/lib/detection";
 import styles from "./agent.module.css";
 
-type Props = { params: Promise<{ slug: string }> };
+type Props = { params: Promise<{ slug: string }>; searchParams: Promise<{ layout?: string }> };
 
 /** Unknown slugs still 404 (notFound below). Pages render on request when the host has no prerender cache, as on Webflow Cloud */
 
@@ -37,8 +37,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-export default async function AgentPage({ params }: Props) {
+export default async function AgentPage({ params, searchParams }: Props) {
   const { slug } = await params;
+  /** Two designs for the answer box while we choose: ?layout=b shows the second */
+  const layout = (await searchParams).layout === "b" ? "b" : "a";
   const agent = getAgent(slug);
   if (!agent) notFound();
 
@@ -129,29 +131,18 @@ export default async function AgentPage({ params }: Props) {
         </span>
       </div>
 
-      <section className={styles.answer} id="how-to-detect" aria-labelledby="detect-heading">
+      <section className={`${styles.answer} ${layout === "b" ? styles.answerB : styles.answerA}`} id="how-to-detect" aria-labelledby="detect-heading">
         <h2 id="detect-heading" className={styles.answerTitle}>
           How to detect {name}
         </h2>
-        <p className={styles.answerLead}>
-          <strong>Short answer: </strong>
-          {lead}
-        </p>
-        <p className={styles.answerWhat}>{what}</p>
+        <p className={styles.answerLead}>{lead}</p>
         <dl className={styles.facts}>
           <div className={styles.fact}>
             <dt>Detection method</dt>
             <dd>
-              <strong>{agent.method}.</strong> {methodInfo(agent.method).meaning}
+              <MethodPill method={agent.method} outline />
+              <span className={styles.factNote}>{methodInfo(agent.method).meaning}</span>
             </dd>
-          </div>
-          <div className={styles.fact}>
-            <dt>Signs its requests</dt>
-            <dd>{agent.signals.cryptographic ? "Yes, verified cryptographically" : "No"}</dd>
-          </div>
-          <div className={styles.fact}>
-            <dt>Names itself in its user agent</dt>
-            <dd>{agent.declaresUserAgent ? "Yes, but a user agent alone is never proof" : "No"}</dd>
           </div>
           <div className={styles.fact}>
             <dt>Signals that identify it</dt>
@@ -159,21 +150,17 @@ export default async function AgentPage({ params }: Props) {
               <ul className={styles.factList}>
                 {usedSignals.map((s) => (
                   <li key={s.key}>
-                    <strong>{s.label}:</strong> {agent.signalDetails[s.key] ?? s.meaning}
+                    <span className={styles.factIcon} aria-hidden="true">
+                      <Icon name={s.icon} size={16} />
+                    </span>
+                    <span>
+                      <strong>{s.label}</strong>
+                      <span className={styles.factDetail}>{agent.signalDetails[s.key] ?? s.meaning}</span>
+                    </span>
                   </li>
                 ))}
               </ul>
             </dd>
-          </div>
-          <div className={styles.fact}>
-            <dt>Agent id in the API</dt>
-            <dd>
-              <code>{agent.id}</code>
-            </dd>
-          </div>
-          <div className={styles.fact}>
-            <dt>How common</dt>
-            <dd>{level.label}</dd>
           </div>
         </dl>
       </section>
@@ -211,12 +198,6 @@ export default async function AgentPage({ params }: Props) {
                 );
               })}
             </ul>
-            {agent.declaresUserAgent && (
-              <p className={styles.uaNote}>
-                <Icon name="idcard" size={16} />
-                Also names itself in its user agent
-              </p>
-            )}
           </section>
 
           <section aria-labelledby="often">

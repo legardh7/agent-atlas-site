@@ -495,73 +495,129 @@ a.typePill:hover {
   }
 }
 
-/* ---------- Answer box: the short answer on how to detect the agent ---------- */
+/* ---------- Answer: how to detect the agent ---------- */
 .answer {
-  margin-top: 24px;
-  padding: 24px 26px;
-  border: 1px solid var(--blue-line);
-  border-left: 4px solid var(--blue);
-  border-radius: 14px;
-  background: var(--panel);
+  margin-top: 28px;
 }
 .answerTitle {
-  font-size: 20px;
-  font-weight: 700;
+  font-size: 26px;
+  line-height: 1.2;
   letter-spacing: -0.01em;
 }
 .answerLead {
-  margin-top: 10px;
-  font-size: 17px;
-  line-height: 1.55;
+  margin-top: 12px;
+  max-width: 780px;
+  font-size: 18px;
+  line-height: 1.6;
   color: var(--fg);
 }
-.answerWhat {
-  margin-top: 8px;
-  font-size: 15px;
-  line-height: 1.55;
-  color: var(--soft);
-}
 .facts {
-  margin: 18px 0 0;
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 12px 24px;
-  border-top: 1px solid var(--blue-line);
-  padding-top: 16px;
+  margin: 0;
 }
 .fact dt {
   font-size: 12px;
   font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.05em;
   color: var(--muted);
 }
 .fact dd {
-  margin: 4px 0 0;
+  margin: 8px 0 0;
   font-size: 15px;
   line-height: 1.5;
   color: var(--fg);
 }
-.fact code {
-  font-family: var(--font-mono);
-  font-size: 13px;
+.factNote {
+  display: block;
+  margin-top: 8px;
+  color: var(--soft);
+  font-size: 14px;
+  line-height: 1.55;
 }
 .factList {
+  list-style: none;
   margin: 0;
-  padding-left: 18px;
+  padding: 0;
+  display: grid;
+  gap: 12px;
 }
-.factList li + li {
-  margin-top: 4px;
+.factList li {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
 }
-.fact:nth-child(4) {
-  grid-column: 1 / -1;
+.factIcon {
+  flex: none;
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--sig-bg);
+  color: var(--blue-text);
 }
-@media (max-width: 640px) {
-  .answer {
-    padding: 20px 18px;
-  }
-  .facts {
+.factDetail {
+  display: block;
+  color: var(--soft);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* Layout A: no box. Heading and answer read like the start of an article, a hairline, then the facts */
+.answerA .facts {
+  margin-top: 24px;
+  padding-top: 22px;
+  border-top: 1px solid var(--line);
+  display: grid;
+  grid-template-columns: minmax(200px, 1fr) minmax(0, 2fr);
+  gap: 20px 48px;
+}
+
+/* Layout B: a plain spec sheet. Neutral border, label column on the left, no colored accents */
+.answerB {
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  overflow: hidden;
+}
+.answerB .answerTitle,
+.answerB .answerLead {
+  padding: 0 24px;
+}
+.answerB .answerTitle {
+  padding-top: 22px;
+}
+.answerB .answerLead {
+  padding-bottom: 22px;
+}
+.answerB .facts {
+  border-top: 1px solid var(--line);
+  background: var(--foot);
+}
+.answerB .fact {
+  display: grid;
+  grid-template-columns: 200px minmax(0, 1fr);
+  gap: 16px;
+  padding: 18px 24px;
+}
+.answerB .fact + .fact {
+  border-top: 1px solid var(--line);
+}
+.answerB .fact dd {
+  margin: 0;
+}
+
+@media (max-width: 720px) {
+  .answerA .facts,
+  .answerB .fact {
     grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  .answerB .answerTitle,
+  .answerB .answerLead,
+  .answerB .fact {
+    padding-left: 18px;
+    padding-right: 18px;
   }
 }
 

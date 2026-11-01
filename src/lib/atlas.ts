@@ -60,8 +60,8 @@ interface AtlasData {
 const data = raw as unknown as AtlasData;
 
 /**
- * Signals as the Verisoul API reports them in the agent block's detection_signals: set by the
- * detection method, plus device for headless automation. Pages show exactly what the API returns.
+ * Signals per agent: set by the detection method, plus device for headless automation and for any
+ * agent that names itself (the user agent is part of the device signal).
  */
 const METHOD_SIGNALS: Record<Method, SignalKey[]> = {
   Signed: ["cryptographic", "behavior"],
@@ -79,6 +79,8 @@ function defaultDetail(a: Agent, key: SignalKey): string {
         ? "Where the traffic comes from, such as the IP address and hosting network, matches what we have seen from it"
         : "Where the traffic comes from, such as the IP address and hosting network, matches the operator";
     case "device":
+      if (a.declaresUserAgent) return `Names itself as ${a.name} in its user agent, which we check against the rest of the session`;
+      if (a.method === "Self-declared") return `Leaves its own ${a.name} markers in the browser, which we check against the rest of the session`;
       return "The browser and device show signs of automation tools";
     case "behavior":
       return a.method === "Signed"
@@ -92,6 +94,8 @@ const GROWING = new Set<string>(overrides.growing);
 function normalize(a: Agent): Agent {
   const on = new Set<SignalKey>(METHOD_SIGNALS[a.method]);
   if (a.type === "Headless automation") on.add("device");
+  // Device covers the browser and device, including the user agent: an agent that names itself there lights it
+  if (a.declaresUserAgent || a.method === "Self-declared") on.add("device");
   const keys: SignalKey[] = ["cryptographic", "network", "device", "behavior"];
   const signals = Object.fromEntries(keys.map((k) => [k, on.has(k)])) as Record<SignalKey, boolean>;
   const signalDetails: Partial<Record<SignalKey, string>> = {};
