@@ -4,8 +4,9 @@ import { notFound } from "next/navigation";
 import { Icon } from "@/components/Icon";
 import { LogoTile, MethodPill, Meter } from "@/components/AgentBits";
 import { CopyButton } from "@/components/CopyButton";
-import { AGENTS, SIGNALS, agentsFromProvider, getAgent, levelInfo, typeInfo, type Agent, type SignalKey } from "@/lib/atlas";
-import { SITE } from "@/lib/site";
+import { AGENTS, SIGNALS, agentsFromProvider, getAgent, levelInfo, methodInfo, typeInfo, type Agent, type SignalKey } from "@/lib/atlas";
+import { SITE, abs } from "@/lib/site";
+import { canBeFaked, howCommon, howToDetect, identifiesItself, whatItIs } from "@/lib/detection";
 import styles from "./agent.module.css";
 
 type Props = { params: Promise<{ slug: string }> };
@@ -21,16 +22,16 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const agent = getAgent(slug);
   if (!agent) return {};
   const description = `${sentence(agent.description)} ${howWeKnow(agent)}`;
-  const path = `/agents/${agent.slug}`;
+  const url = abs(`/${agent.slug}`);
   return {
-    title: agent.name,
+    title: `${agent.name}: what it is and how to detect it`,
     description,
-    alternates: { canonical: path },
+    alternates: { canonical: url },
     openGraph: {
       type: "website",
       siteName: SITE.name,
-      url: path,
-      title: `${agent.name} | ${SITE.name}`,
+      url,
+      title: `How to detect ${agent.name} | ${SITE.name}`,
       description,
     },
   };
@@ -50,9 +51,41 @@ export default async function AgentPage({ params }: Props) {
   const related = unknownProvider ? [] : agentsFromProvider(agent, 6);
   const regions = agent.variants && agent.variants.length > 0 ? agent.variants : null;
   const isFamily = agent.id.includes("<region>");
+  const lead = howToDetect(agent);
+  const what = whatItIs(agent);
+  const usedSignals = SIGNALS.filter((s) => agent.signals[s.key]);
+  const faq = [
+    { q: `How do you detect ${name}?`, a: lead },
+    { q: `What is ${name}?`, a: what },
+    { q: `Does ${name} identify itself?`, a: identifiesItself(agent) },
+    { q: `Can a bot pretend to be ${name}?`, a: canBeFaked(agent) },
+    { q: `How common is ${name}?`, a: howCommon(agent) },
+    {
+      q: `What does the Verisoul API return for ${name}?`,
+      a: `Every session Verisoul identifies as ${name} carries identified_agent: "${agent.id}", so you can allow, limit or block it by name.`,
+    },
+  ];
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "FAQPage",
+        mainEntity: faq.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })),
+      },
+      {
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          { "@type": "ListItem", position: 1, name: "Verisoul", item: SITE.links.home },
+          { "@type": "ListItem", position: 2, name: "Agent Atlas", item: abs("/") },
+          { "@type": "ListItem", position: 3, name, item: abs(`/${agent.slug}`) },
+        ],
+      },
+    ],
+  };
 
   return (
     <main className={`container ${styles.page}`}>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }} />
       <Link href="/" className={styles.back}>
         <Icon name="arrowLeft" size={16} strokeWidth={2} />
         All agents
@@ -96,13 +129,60 @@ export default async function AgentPage({ params }: Props) {
         </span>
       </div>
 
-      <p className={styles.description}>{agent.description}</p>
+      <section className={styles.answer} id="how-to-detect" aria-labelledby="detect-heading">
+        <h2 id="detect-heading" className={styles.answerTitle}>
+          How to detect {name}
+        </h2>
+        <p className={styles.answerLead}>
+          <strong>Short answer: </strong>
+          {lead}
+        </p>
+        <p className={styles.answerWhat}>{what}</p>
+        <dl className={styles.facts}>
+          <div className={styles.fact}>
+            <dt>Detection method</dt>
+            <dd>
+              <strong>{agent.method}.</strong> {methodInfo(agent.method).meaning}
+            </dd>
+          </div>
+          <div className={styles.fact}>
+            <dt>Signs its requests</dt>
+            <dd>{agent.signals.cryptographic ? "Yes, verified cryptographically" : "No"}</dd>
+          </div>
+          <div className={styles.fact}>
+            <dt>Names itself in its user agent</dt>
+            <dd>{agent.declaresUserAgent ? "Yes, but a user agent alone is never proof" : "No"}</dd>
+          </div>
+          <div className={styles.fact}>
+            <dt>Signals that identify it</dt>
+            <dd>
+              <ul className={styles.factList}>
+                {usedSignals.map((s) => (
+                  <li key={s.key}>
+                    <strong>{s.label}:</strong> {agent.signalDetails[s.key] ?? s.meaning}
+                  </li>
+                ))}
+              </ul>
+            </dd>
+          </div>
+          <div className={styles.fact}>
+            <dt>Verisoul API value</dt>
+            <dd>
+              <code>identified_agent: &quot;{agent.id}&quot;</code>
+            </dd>
+          </div>
+          <div className={styles.fact}>
+            <dt>How common</dt>
+            <dd>{level.label}</dd>
+          </div>
+        </dl>
+      </section>
 
       <div className={styles.columns}>
         <div className={styles.main}>
           <section aria-labelledby="how">
             <h2 id="how" className={styles.h2}>
-              How Verisoul identifies {name}
+              Every signal Verisoul checks for {name}
             </h2>
             <p className={styles.intro}>{methodIntro(agent)}</p>
             <ul className={styles.signals}>
@@ -179,7 +259,7 @@ export default async function AgentPage({ params }: Props) {
               <ul className={styles.rows}>
                 {related.map((a) => (
                   <li key={a.slug}>
-                    <Link href={`/agents/${a.slug}`} className={styles.row}>
+                    <Link href={`/${a.slug}`} className={styles.row}>
                       <span className={styles.rowText}>
                         <span className={styles.rowName}>{a.name}</span>
                         <span className={styles.rowDesc}>{a.description}</span>
@@ -198,6 +278,19 @@ export default async function AgentPage({ params }: Props) {
               </ul>
             </section>
           )}
+          <section aria-labelledby="faq">
+            <h2 id="faq" className={styles.h2}>
+              Questions about {name}
+            </h2>
+            <div className={styles.faq}>
+              {faq.map((f) => (
+                <div key={f.q} className={styles.faqItem}>
+                  <h3 className={styles.faqQ}>{f.q}</h3>
+                  <p className={styles.faqA}>{f.a}</p>
+                </div>
+              ))}
+            </div>
+          </section>
         </div>
 
         <aside className={styles.aside} aria-label={`More about ${name}`}>

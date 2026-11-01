@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { LOGOS, siteIcon, type Agent } from "@/lib/atlas";
+import { asset } from "@/lib/site";
 
 /**
  * Full-color company or product logo on a light tile.
@@ -18,7 +19,7 @@ export function LogoTile({ agent, size = 36 }: { agent: Agent; size?: number }) 
     <span className={`logo-tile${logo || favicon ? " has-logo" : ""}`} style={{ width: size, height: size, borderRadius: radius }} aria-hidden="true">
       {logo ? (
         // eslint-disable-next-line @next/next/no-img-element
-        <img src={logo.src} alt="" width={glyph} height={glyph} decoding="async" loading="lazy" style={{ width: glyph, height: glyph, objectFit: "contain" }} />
+        <img src={asset(logo.src)} alt="" width={glyph} height={glyph} decoding="async" loading="lazy" style={{ width: glyph, height: glyph, objectFit: "contain" }} />
       ) : favicon ? (
         // eslint-disable-next-line @next/next/no-img-element
         <img

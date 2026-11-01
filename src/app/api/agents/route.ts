@@ -28,7 +28,7 @@ export function GET() {
     signalDetails: a.signalDetails,
     declaresUserAgent: a.declaresUserAgent,
     variants: a.variants,
-    url: `${base}/agents/${a.slug}`,
+    url: `${base}/${a.slug}`,
   }));
 
   return Response.json(

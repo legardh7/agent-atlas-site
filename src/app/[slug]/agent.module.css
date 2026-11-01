@@ -494,3 +494,90 @@ a.typePill:hover {
     font-size: 34px;
   }
 }
+
+/* ---------- Answer box: the short answer on how to detect the agent ---------- */
+.answer {
+  margin-top: 24px;
+  padding: 24px 26px;
+  border: 1px solid var(--blue-line);
+  border-left: 4px solid var(--blue);
+  border-radius: 14px;
+  background: var(--panel);
+}
+.answerTitle {
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+.answerLead {
+  margin-top: 10px;
+  font-size: 17px;
+  line-height: 1.55;
+  color: var(--fg);
+}
+.answerWhat {
+  margin-top: 8px;
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--soft);
+}
+.facts {
+  margin: 18px 0 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px 24px;
+  border-top: 1px solid var(--blue-line);
+  padding-top: 16px;
+}
+.fact dt {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+}
+.fact dd {
+  margin: 4px 0 0;
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--fg);
+}
+.fact code {
+  font-family: var(--font-mono);
+  font-size: 13px;
+}
+.factList {
+  margin: 0;
+  padding-left: 18px;
+}
+.factList li + li {
+  margin-top: 4px;
+}
+.fact:nth-child(4) {
+  grid-column: 1 / -1;
+}
+@media (max-width: 640px) {
+  .answer {
+    padding: 20px 18px;
+  }
+  .facts {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ---------- FAQ ---------- */
+.faq {
+  margin-top: 16px;
+  display: grid;
+  gap: 18px;
+}
+.faqQ {
+  font-size: 16px;
+  font-weight: 700;
+}
+.faqA {
+  margin-top: 6px;
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--soft);
+}

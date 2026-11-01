@@ -1,6 +1,7 @@
 import { Icon } from "@/components/Icon";
 import { COUNTS, TOTAL_AGENTS, TYPES, UPDATED, typeInfo, type AgentType } from "@/lib/atlas";
 import styles from "./Directory.module.css";
+import { BASE_PATH } from "@/lib/site";
 
 const STATS = [
   { label: "Agents", value: TOTAL_AGENTS },
@@ -59,7 +60,7 @@ export function Hero({ activeType, onSelectType }: { activeType: AgentType | nul
                     {body}
                   </button>
                 ) : (
-                  <a className={styles.typeCard} href={`/?type=${typeInfo(t.key).slug}#agents`}>
+                  <a className={styles.typeCard} href={`${BASE_PATH}/?type=${typeInfo(t.key).slug}#agents`}>
                     {body}
                   </a>
                 )}

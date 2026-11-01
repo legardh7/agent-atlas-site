@@ -3,10 +3,10 @@ import "./globals.css";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { themeInitScript } from "@/components/ThemeToggle";
-import { SITE } from "@/lib/site";
+import { ORIGIN, SITE } from "@/lib/site";
 
 export const metadata: Metadata = {
-  metadataBase: new URL(SITE.url),
+  metadataBase: new URL(`${ORIGIN}/`),
   title: {
     default: "Agent Atlas: every AI agent and bot Verisoul identifies",
     template: "%s | Verisoul Agent Atlas",

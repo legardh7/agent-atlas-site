@@ -1,10 +1,13 @@
 import type { MetadataRoute } from "next";
-import { SITE } from "@/lib/site";
+import { abs } from "@/lib/site";
 
+/**
+ * Only used where the Atlas runs at a domain root (the old agents.verisoul.ai host).
+ * On www.verisoul.ai the site-wide robots.txt comes from Webflow.
+ */
 export default function robots(): MetadataRoute.Robots {
-  const base = SITE.url.replace(/\/+$/, "");
   return {
     rules: { userAgent: "*", allow: "/" },
-    sitemap: `${base}/sitemap.xml`,
+    sitemap: abs("/sitemap.xml"),
   };
 }

@@ -514,7 +514,7 @@ function AgentRow({ agent: a, open, onToggle }: { agent: Agent; open: boolean; o
             <p className={styles.methodNote}>
               <strong>{a.method}:</strong> {methodInfo(a.method).meaning}
             </p>
-            <Link href={`/agents/${a.slug}`} className={styles.pageLink}>
+            <Link href={`/${a.slug}`} className={styles.pageLink}>
               Open the {a.name} page
               <Icon name="arrow" size={16} strokeWidth={2} />
             </Link>

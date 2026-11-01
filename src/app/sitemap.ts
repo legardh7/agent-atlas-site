@@ -1,16 +1,21 @@
 import type { MetadataRoute } from "next";
-import { AGENTS } from "@/lib/atlas";
-import { SITE } from "@/lib/site";
+import { AGENTS, TYPES } from "@/lib/atlas";
+import { abs } from "@/lib/site";
 
 /** Date the directory data was last refreshed; bump it when agents.json changes */
-const LAST_MODIFIED = "2026-10-26";
+const LAST_MODIFIED = "2026-11-01";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const base = SITE.url.replace(/\/+$/, "");
   return [
-    { url: `${base}/`, lastModified: LAST_MODIFIED, changeFrequency: "weekly", priority: 1 },
+    { url: abs("/"), lastModified: LAST_MODIFIED, changeFrequency: "weekly", priority: 1 },
+    ...TYPES.map((t) => ({
+      url: abs(`/type/${t.slug}`),
+      lastModified: LAST_MODIFIED,
+      changeFrequency: "weekly" as const,
+      priority: 0.7,
+    })),
     ...AGENTS.map((a) => ({
-      url: `${base}/agents/${a.slug}`,
+      url: abs(`/${a.slug}`),
       lastModified: LAST_MODIFIED,
       changeFrequency: "monthly" as const,
       priority: 0.6,
