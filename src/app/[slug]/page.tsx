@@ -283,7 +283,7 @@ export default async function AgentPage({ params }: Props) {
                 : `Every session Verisoul identifies as ${name} carries this agent block`}
             </p>
             <ApiBlock agent={agent} />
-            {!agent.signals.device && (
+            {!apiAgent(agent).detection_signals.includes("device") && (
               <p className={styles.apiNote}>detection_signals also includes device when the session shows signs of automation tools.</p>
             )}
             <a href={SITE.links.api} className={styles.docs}>

@@ -140,6 +140,23 @@ const API_TYPE: Record<AgentType, string> = {
 const API_METHOD: Record<Method, string> = { Signed: "signed", "Self-declared": "self_declared", Inferred: "inferred" };
 const API_SIGNAL: Record<SignalKey, string> = { cryptographic: "cryptographic", network: "network", device: "device", behavior: "behavioral" };
 
+/**
+ * detection_signals exactly as the API sets them (buildAgent in packages/predict): by detection method,
+ * plus device for headless automation. The API also adds device per session when it sees automation
+ * tools, which the page notes under the block. The signal cards on the page can show more (device for
+ * agents that name themselves); the block always mirrors the API.
+ */
+const API_METHOD_SIGNALS: Record<Method, SignalKey[]> = {
+  Signed: ["cryptographic", "behavior"],
+  "Self-declared": ["network", "behavior"],
+  Inferred: ["network", "device", "behavior"],
+};
+function apiSignals(a: Agent): SignalKey[] {
+  const on = new Set<SignalKey>(API_METHOD_SIGNALS[a.method]);
+  if (a.type === "Headless automation") on.add("device");
+  return (["cryptographic", "network", "device", "behavior"] as SignalKey[]).filter((k) => on.has(k));
+}
+
 /** The agent block the Verisoul API returns for a session identified as this agent */
 export function apiAgent(a: Agent) {
   return {
@@ -148,7 +165,7 @@ export function apiAgent(a: Agent) {
     provider: a.provider,
     type: API_TYPE[a.type],
     detection_method: API_METHOD[a.method],
-    detection_signals: (["cryptographic", "network", "device", "behavior"] as SignalKey[]).filter((k) => a.signals[k]).map((k) => API_SIGNAL[k]),
+    detection_signals: apiSignals(a).map((k) => API_SIGNAL[k]),
   };
 }
 
