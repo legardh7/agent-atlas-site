@@ -929,7 +929,8 @@
   gap: 14px;
 }
 
-.panelColApi > :global(.code-chip) {
+.panelColApi > :global(.code-chip),
+.panelColApi > :global(.api-block) {
   align-self: stretch;
 }
 
