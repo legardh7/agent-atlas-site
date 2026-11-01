@@ -1,3 +1,13 @@
+/* Youth Medium, licensed for www.verisoul.ai and served from the Verisoul Webflow site's font library
+   (not committed here: the licence covers embedding on our domain, not redistributing the file) */
+@font-face {
+  font-family: "Youth";
+  src: url("https://cdn.prod.website-files.com/6627605478f226ce86d5c27f/fonts/6ae7ac0bb3d4b53d7696c31f-Youth-Medium.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
 /* Verisoul Agent Atlas: theme tokens and shared pieces.
    Brand: Youth for headings, Geist for text, one blue accent (#2160fd), navy text (#0f1e3d), panel (#f3f8ff). */
 
@@ -365,4 +375,6 @@ h2,
 h3,
 h4 {
   font-family: var(--font-display);
+  /* Youth comes in one weight (Medium); don't let the browser fake bold */
+  font-synthesis: none;
 }
