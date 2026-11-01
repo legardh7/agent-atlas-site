@@ -564,8 +564,15 @@ a.typePill:hover {
   line-height: 1.5;
 }
 
-/* Layout A: no box. Heading and answer read like the start of an article, a hairline, then the facts */
-.answerA .facts {
+/* The answer is one bounded block (a plain outline, no colored accent) so people and AI crawlers
+   find it at a glance: heading and answer, a hairline, then method and signals */
+.answer {
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 26px 28px;
+  background: var(--bg);
+}
+.answer .facts {
   margin-top: 24px;
   padding-top: 22px;
   border-top: 1px solid var(--line);
@@ -574,50 +581,13 @@ a.typePill:hover {
   gap: 20px 48px;
 }
 
-/* Layout B: a plain spec sheet. Neutral border, label column on the left, no colored accents */
-.answerB {
-  border: 1px solid var(--line);
-  border-radius: 10px;
-  overflow: hidden;
-}
-.answerB .answerTitle,
-.answerB .answerLead {
-  padding: 0 24px;
-}
-.answerB .answerTitle {
-  padding-top: 22px;
-}
-.answerB .answerLead {
-  padding-bottom: 22px;
-}
-.answerB .facts {
-  border-top: 1px solid var(--line);
-  background: var(--foot);
-}
-.answerB .fact {
-  display: grid;
-  grid-template-columns: 200px minmax(0, 1fr);
-  gap: 16px;
-  padding: 18px 24px;
-}
-.answerB .fact + .fact {
-  border-top: 1px solid var(--line);
-}
-.answerB .fact dd {
-  margin: 0;
-}
-
 @media (max-width: 720px) {
-  .answerA .facts,
-  .answerB .fact {
-    grid-template-columns: 1fr;
-    gap: 10px;
+  .answer {
+    padding: 20px 18px;
   }
-  .answerB .answerTitle,
-  .answerB .answerLead,
-  .answerB .fact {
-    padding-left: 18px;
-    padding-right: 18px;
+  .answer .facts {
+    grid-template-columns: 1fr;
+    gap: 18px;
   }
 }
 

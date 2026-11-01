@@ -9,7 +9,7 @@ import { SITE, abs } from "@/lib/site";
 import { canBeFaked, howCommon, howToDetect, identifiesItself, whatItIs } from "@/lib/detection";
 import styles from "./agent.module.css";
 
-type Props = { params: Promise<{ slug: string }>; searchParams: Promise<{ layout?: string }> };
+type Props = { params: Promise<{ slug: string }> };
 
 /** Unknown slugs still 404 (notFound below). Pages render on request when the host has no prerender cache, as on Webflow Cloud */
 
@@ -37,10 +37,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-export default async function AgentPage({ params, searchParams }: Props) {
+export default async function AgentPage({ params }: Props) {
   const { slug } = await params;
-  /** Two designs for the answer box while we choose: ?layout=b shows the second */
-  const layout = (await searchParams).layout === "b" ? "b" : "a";
   const agent = getAgent(slug);
   if (!agent) notFound();
 
@@ -131,7 +129,7 @@ export default async function AgentPage({ params, searchParams }: Props) {
         </span>
       </div>
 
-      <section className={`${styles.answer} ${layout === "b" ? styles.answerB : styles.answerA}`} id="how-to-detect" aria-labelledby="detect-heading">
+      <section className={styles.answer} id="how-to-detect" aria-labelledby="detect-heading">
         <h2 id="detect-heading" className={styles.answerTitle}>
           How to detect {name}
         </h2>
