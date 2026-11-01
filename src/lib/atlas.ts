@@ -96,7 +96,9 @@ function normalize(a: Agent): Agent {
   const signals = Object.fromEntries(keys.map((k) => [k, on.has(k)])) as Record<SignalKey, boolean>;
   const signalDetails: Partial<Record<SignalKey, string>> = {};
   for (const k of keys) if (on.has(k)) signalDetails[k] = a.signalDetails[k] ?? defaultDetail(a, k);
-  return { ...a, signals, signalDetails, rank: GROWING.has(a.slug) ? 5 : a.rank };
+  const extraNames = (overrides.aliases as Record<string, string[]>)[a.slug] ?? [];
+  const aliases = [...a.aliases, ...extraNames.filter((n) => !a.aliases.includes(n))];
+  return { ...a, aliases, signals, signalDetails, rank: GROWING.has(a.slug) ? 5 : a.rank };
 }
 
 const extra = (overrides.extraAgents as unknown as Omit<Agent, "order">[]).filter((x) => !data.agents.some((a) => a.slug === x.slug));
