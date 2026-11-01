@@ -8,7 +8,7 @@ import styles from "@/components/browse/Browse.module.css";
 
 type Props = { params: Promise<{ type: string }> };
 
-export const dynamicParams = false;
+/** Unknown slugs still 404 (notFound below). Pages render on request when the host has no prerender cache, as on Webflow Cloud */
 
 export function generateStaticParams() {
   return TYPES.map((t) => ({ type: t.slug }));

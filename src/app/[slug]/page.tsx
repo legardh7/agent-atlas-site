@@ -11,7 +11,7 @@ import styles from "./agent.module.css";
 
 type Props = { params: Promise<{ slug: string }> };
 
-export const dynamicParams = false;
+/** Unknown slugs still 404 (notFound below). Pages render on request when the host has no prerender cache, as on Webflow Cloud */
 
 export function generateStaticParams() {
   return AGENTS.map((a) => ({ slug: a.slug }));

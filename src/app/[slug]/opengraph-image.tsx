@@ -3,14 +3,14 @@ import { join } from "node:path";
 import { ImageResponse } from "next/og";
 import { ICONS, type IconName } from "@/lib/icons";
 import { AGENTS, LOGOS, SIGNALS, getAgent, levelInfo, methodInfo, typeInfo, type Agent } from "@/lib/atlas";
-import { SITE } from "@/lib/site";
+import { ORIGIN, SITE, asset } from "@/lib/site";
 
 export const alt = "Verisoul Agent Atlas card: who runs this agent, what kind it is, how common it is and which signals Verisoul uses to identify it";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
 /** One card per agent, all built at deploy time; unknown slugs return 404 */
-export const dynamicParams = false;
+/** Unknown slugs still 404 (notFound below). Pages render on request when the host has no prerender cache, as on Webflow Cloud */
 
 export function generateStaticParams() {
   return AGENTS.map((a) => ({ slug: a.slug }));
@@ -59,19 +59,28 @@ function StrokeIcon({ name, size, color }: { name: IconName; size: number; color
 }
 
 /** The agent's full-color logo file as a data URI (Satori draws it like any image) */
-function logoDataUri(agent: Agent): string | null {
+async function logoDataUri(agent: Agent): Promise<string | null> {
   const logo = agent.logo ? LOGOS[agent.logo] : null;
   if (!logo) return null;
   try {
     const svg = readFileSync(join(process.cwd(), "public", logo.src));
     return `data:image/svg+xml;base64,${svg.toString("base64")}`;
   } catch {
-    return null;
+    // No file system at request time on the edge: fetch the public file instead
+    try {
+      const res = await fetch(`${ORIGIN}${asset(logo.src)}`);
+      if (!res.ok) return null;
+      const bytes = new Uint8Array(await res.arrayBuffer());
+      let bin = "";
+      for (const b of bytes) bin += String.fromCharCode(b);
+      return `data:image/svg+xml;base64,${btoa(bin)}`;
+    } catch {
+      return null;
+    }
   }
 }
 
-function LogoTile({ agent }: { agent: Agent }) {
-  const logo = logoDataUri(agent);
+function LogoTile({ agent, logo }: { agent: Agent; logo: string | null }) {
   return (
     <div
       style={{
@@ -126,6 +135,7 @@ export default async function Image({ params }: { params: Promise<{ slug: string
   const { slug } = await params;
   const agent = getAgent(slug);
   if (!agent) return new Response("Not found", { status: 404 });
+  const logo = await logoDataUri(agent);
 
   const type = typeInfo(agent.type);
   const method = methodInfo(agent.method);
@@ -151,7 +161,7 @@ export default async function Image({ params }: { params: Promise<{ slug: string
 
           {/* Logo, name and provider */}
           <div style={{ display: "flex", alignItems: "center" }}>
-            <LogoTile agent={agent} />
+            <LogoTile agent={agent} logo={logo} />
             <div style={{ display: "flex", flexDirection: "column", marginLeft: 36, maxWidth: 890 }}>
               <div style={{ display: "flex", fontSize: fs, lineHeight: 1.08, ...bold(fs >= 64 ? 2.6 : 2.2, NAVY) }}>{agent.name}</div>
               <div style={{ display: "flex", marginTop: 14, fontSize: 30, color: MUTED }}>{provider}</div>
