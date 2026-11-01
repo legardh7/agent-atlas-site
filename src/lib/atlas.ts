@@ -146,10 +146,11 @@ export function apiAgent(a: Agent) {
   };
 }
 
-/** apiAgent as the "agent": {...} snippet shown on the site */
+/** apiAgent as the "agent": {...} snippet shown on the site, one value per line so it never wraps mid-array */
 export function apiAgentJson(a: Agent): string {
-  return `"agent": ${JSON.stringify(apiAgent(a), null, 2).replace(/\[\s+("[^\]]+?)\s+\]/g, (_, inner: string) => `[${inner.replace(/\s+/g, " ")}]`)}`;
+  return `"agent": ${JSON.stringify(apiAgent(a), null, 2)}`;
 }
+
 
 export const TYPES: { key: AgentType; slug: string; icon: IconName; meaning: string }[] = [
   { key: "AI agent", slug: "ai-agent", icon: "bot", meaning: "Carries out tasks in a browser or on a computer" },
