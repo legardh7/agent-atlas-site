@@ -378,3 +378,14 @@ h4 {
   /* Youth comes in one weight (Medium); don't let the browser fake bold */
   font-synthesis: none;
 }
+
+/* JSON colors on the dark API block: blue keys, green values, quiet punctuation */
+.api-block .json-key {
+  color: #8cb0ff;
+}
+.api-block .json-string {
+  color: #9fe0bd;
+}
+.api-block .json-punct {
+  color: #8a96ad;
+}
