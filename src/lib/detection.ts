@@ -103,3 +103,20 @@ export function sentence(text: string): string {
   const t = text.trim();
   return /[.!?]$/.test(t) ? t : `${t}.`;
 }
+
+/** Why a copycat bot is not labeled as this agent */
+export function lookAlikes(agent: Agent): string {
+  const { name, provider } = agent;
+  switch (agent.method) {
+    case "Signed": {
+      const ownerKeys = provider === "Unknown" ? "its operator's" : possessive(provider);
+      return `Signatures can't be copied. A bot pretending to be ${name} without ${ownerKeys} signing keys won't be labeled ${name}.`;
+    }
+    case "Self-declared":
+      return agent.declaresUserAgent
+        ? `A bot that copies ${possessive(name)} user agent from somewhere else won't be labeled ${name}, because the rest of the signals won't match.`
+        : `A bot that fakes one of ${possessive(name)} markers won't be labeled ${name}, because the rest of the signals won't match.`;
+    case "Inferred":
+      return `We only label a session ${name} when several signals agree, so one matching trait isn't enough.`;
+  }
+}

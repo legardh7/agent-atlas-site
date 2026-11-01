@@ -1,0 +1,472 @@
+/* Detection guides: the long-form, blog-style article that sits inside an Atlas agent page.
+   Page chrome (hero, answer card, rows, aside cards) comes from agent.module.css; this file is the article. */
+
+.guide {
+  --soft: #4b5563;
+  max-width: 720px;
+  font-size: 17px;
+  line-height: 1.75;
+  color: var(--soft);
+}
+
+:global(:root[data-theme="dark"]) .guide {
+  --soft: #b6c0d4;
+}
+
+.guide > p {
+  margin: 0 0 22px;
+}
+
+.guide h2 {
+  font-size: 28px;
+  line-height: 1.25;
+  color: var(--fg);
+  margin: 44px 0 14px;
+  letter-spacing: -0.01em;
+  text-wrap: balance;
+  scroll-margin-top: 24px;
+}
+
+.guide h2:first-child {
+  margin-top: 0;
+}
+
+.guide h3 {
+  font-size: 20px;
+  line-height: 1.3;
+  color: var(--fg);
+  margin: 30px 0 8px;
+}
+
+.guide ul,
+.guide ol {
+  margin: 0 0 24px;
+  padding-left: 24px;
+}
+
+.guide li {
+  margin-bottom: 8px;
+  padding-left: 4px;
+}
+
+.guide ol li::marker {
+  font-weight: 700;
+  color: var(--fg);
+}
+
+.guide a {
+  color: var(--blue-text);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+
+.guide code {
+  font-family: var(--font-mono);
+  font-size: 0.86em;
+  background: var(--chip);
+  border: 1px solid var(--line-soft);
+  padding: 1px 5px;
+  border-radius: 5px;
+  overflow-wrap: anywhere;
+}
+
+/* ---------- Tables ---------- */
+
+.table {
+  overflow-x: auto;
+  margin: 4px 0 28px;
+}
+
+.table table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+.table th {
+  text-align: left;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--muted);
+  padding: 10px 16px 10px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.table td {
+  padding: 12px 16px 12px 0;
+  border-bottom: 1px solid var(--line-soft);
+  vertical-align: top;
+  color: var(--fg);
+}
+
+.table td:first-child {
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* ---------- Figures ---------- */
+
+.guide figure {
+  margin: 8px 0 32px;
+}
+
+.guide figcaption {
+  font-size: 14px;
+  color: var(--muted);
+  margin-top: 10px;
+  line-height: 1.5;
+}
+
+.shot img {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  border-radius: 14px;
+  border: 1px solid var(--line);
+}
+
+.shot.tall img {
+  max-width: 380px;
+  margin: 0 auto;
+}
+
+.shot.tall figcaption {
+  text-align: center;
+}
+
+.api {
+  margin: 4px 0 28px;
+}
+
+/* Share chart: finding as title, grey bars, one blue accent, direct labels */
+.chart h4 {
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.35;
+  font-weight: 600;
+  color: var(--fg);
+  margin: 0 0 4px;
+}
+
+.chartSub {
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--muted);
+  margin: 0 0 14px;
+}
+
+.chart svg {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.chartLabel {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  fill: var(--soft);
+}
+
+.chartValue {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  fill: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.chartLabel.on {
+  fill: var(--fg);
+  font-weight: 600;
+}
+
+.chartValue.on {
+  fill: var(--blue-text);
+  font-weight: 600;
+}
+
+.chart figcaption {
+  font-size: 12px;
+}
+
+/* Request flow: numbered steps on a rule, the last one in blue */
+.flow {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  margin: 8px 0 0 !important;
+  padding: 0 !important;
+}
+
+.flow li {
+  flex: 1 1 140px;
+  min-width: 0;
+  border-top: 3px solid var(--off);
+  padding: 12px 16px 0 0 !important;
+  margin: 0 !important;
+  font-size: 15px;
+  line-height: 1.45;
+  color: var(--fg);
+}
+
+.flow li:last-child {
+  border-top-color: var(--blue);
+}
+
+.flow li span {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--muted);
+  margin-bottom: 4px;
+}
+
+.video {
+  margin-top: 8px;
+}
+
+.videoFrame {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  max-width: 100%;
+  border-radius: 14px;
+  overflow: hidden;
+  background: var(--cta);
+}
+
+.videoFrame iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+/* ---------- Page pieces around the article ---------- */
+
+.byline {
+  margin-top: 18px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 10px;
+  align-items: center;
+  font-size: 14px;
+  color: var(--muted);
+}
+
+.avatar {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--blue);
+  color: #ffffff;
+  display: grid;
+  place-items: center;
+  font-family: var(--font-display);
+  font-size: 13px;
+}
+
+.byline strong {
+  color: var(--fg);
+  font-weight: 600;
+}
+
+.dot {
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: var(--faint);
+}
+
+.dek {
+  margin-top: 22px;
+  max-width: 780px;
+  font-size: 20px;
+  line-height: 1.5;
+  color: var(--fg);
+}
+
+.guidePill {
+  background: var(--panel);
+  color: var(--blue-text);
+}
+
+.notNamed {
+  background: var(--chip);
+  color: var(--muted);
+  border: 1px dashed var(--off);
+}
+
+.logo {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: var(--logo-tile);
+  box-shadow: inset 0 0 0 1px var(--logo-tile-line);
+}
+
+.logo img {
+  object-fit: contain;
+}
+
+.logo.full img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover;
+}
+
+.toc {
+  margin-top: 10px;
+}
+
+.toc a {
+  display: block;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.4;
+  padding: 5px 0 5px 12px;
+  border-left: 2px solid var(--line);
+}
+
+.toc a:hover {
+  color: var(--fg);
+  border-color: var(--blue);
+  opacity: 1;
+}
+
+.sources {
+  margin: 12px 0 0;
+  padding-left: 20px;
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--muted);
+}
+
+.sources a {
+  color: var(--fg);
+}
+
+.sources a:hover {
+  color: var(--blue-text);
+  opacity: 1;
+}
+
+.sticky {
+  position: sticky;
+  top: 24px;
+}
+
+@media (max-width: 960px) {
+  .sticky {
+    position: static;
+  }
+  .tocCard {
+    display: none;
+  }
+}
+
+@media (max-width: 560px) {
+  .guide {
+    font-size: 16px;
+  }
+  .guide h2 {
+    font-size: 24px;
+  }
+  .table td:first-child {
+    white-space: normal;
+  }
+  .dek {
+    font-size: 18px;
+  }
+}
+
+/* ---------- Homepage: Detection guides ---------- */
+
+.hub {
+  padding-block: 56px 8px;
+}
+
+.hubHead {
+  max-width: 760px;
+}
+
+.hubTitle {
+  font-size: clamp(30px, 4.5vw, 44px);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+.hubLead {
+  margin-top: 12px;
+  font-size: 17px;
+  line-height: 1.55;
+  color: var(--muted);
+}
+
+.group {
+  margin-top: 32px;
+}
+
+.groupName {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+  margin-bottom: 12px;
+}
+
+.cards {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr));
+  gap: 12px;
+}
+
+.card {
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr);
+  gap: 14px;
+  height: 100%;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  color: var(--fg);
+  transition: background-color 0.12s ease, border-color 0.12s ease;
+}
+
+.card:hover {
+  border-color: var(--blue-line);
+  background: var(--hover);
+  opacity: 1;
+}
+
+.cardName {
+  display: block;
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 1.3;
+}
+
+.cardDek {
+  margin-top: 4px;
+  font-size: 13px;
+  line-height: 1.45;
+  color: var(--muted);
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
