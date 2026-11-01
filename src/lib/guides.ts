@@ -28,6 +28,8 @@ export interface Standalone {
 }
 
 export interface Guide {
+  /** Name to show instead of the Atlas entry's, when people search for the product by another name */
+  displayName?: string;
   /** Atlas slug of the page this guide is shown on */
   slug: string;
   /** The guide's own key */
@@ -76,7 +78,7 @@ export const STANDALONE_GUIDES = GUIDES.filter((g) => g.standalone && !AGENTS.so
 
 /** The display name of the thing a guide covers */
 export function guideName(g: Guide): string {
-  return g.standalone ? g.standalone.name : getAgent(g.slug)?.name ?? g.slug;
+  return g.displayName ?? (g.standalone ? g.standalone.name : getAgent(g.slug)?.name ?? g.slug);
 }
 
 export function guideMembers(g: Guide): Agent[] {

@@ -443,7 +443,8 @@
     "Still dropped: HUMAN ranking and Akamai/Vercel bot tags"
    ],
    "slug": "chatgpt-agent",
-   "standalone": null
+   "standalone": null,
+   "displayName": "ChatGPT Dots"
   },
   {
    "guide": "claude-duet",

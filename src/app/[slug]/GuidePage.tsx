@@ -57,7 +57,7 @@ export function plain(text: string): string {
  */
 export function GuidePage({ guide, agent }: { guide: Guide; agent: Agent | null }) {
   const s = guide.standalone;
-  const name = agent ? agent.name : s!.name;
+  const name = guide.displayName ?? (agent ? agent.name : s!.name);
   const provider = agent ? agent.provider : s!.provider;
   const openSource = provider === "Open source";
   const linkProvider = Boolean(agent) && provider !== "Unknown" && !openSource;
@@ -80,7 +80,7 @@ export function GuidePage({ guide, agent }: { guide: Guide; agent: Agent | null 
   const apiFor = agent ?? apiMember;
   const api: ReactNode = apiFor ? <ApiBlock agent={apiFor} /> : <NullApiBlock />;
   const apiLead = agent
-    ? `Every session Verisoul identifies as ${name} carries this agent block`
+    ? `Every session Verisoul identifies as ${name} carries this agent block${agent.name !== name ? `, named ${agent.name} in the API` : ""}`
     : apiMember
       ? `Sessions Verisoul can name come back as ${apiMember.name}`
       : "Verisoul flags these sessions through bot score, and the agent field stays empty until we name it";
@@ -380,12 +380,14 @@ export function GuidePage({ guide, agent }: { guide: Guide; agent: Agent | null 
             </section>
           )}
 
-          {agent && agent.aliases.length > 0 && (
+          {agent && (agent.aliases.length > 0 || agent.name !== name) && (
             <section className={styles.card} aria-labelledby="aka">
               <h2 id="aka" className={styles.cardTitle}>
                 Also known as
               </h2>
-              <p className={styles.cardText}>{agent.aliases.join(", ")}</p>
+              <p className={styles.cardText}>{[...(agent.name !== name ? [agent.name] : []), ...agent.aliases]
+                  .filter((x, i, all) => x.toLowerCase() !== name.toLowerCase() && all.findIndex((y) => y.toLowerCase() === x.toLowerCase()) === i)
+                  .join(", ")}</p>
             </section>
           )}
         </aside>
