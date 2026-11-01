@@ -35,6 +35,7 @@ import {
   type SortKey,
 } from "./filters";
 import { Hero } from "./Hero";
+import { ApiBlock } from "@/components/ApiBlock";
 import { ColumnHeader, useColumnWidths } from "./Columns";
 import styles from "./Directory.module.css";
 
@@ -244,7 +245,7 @@ function FilterBar({
               options={LEVELS.map((l) => ({
                 key: String(l.rank),
                 label: l.label,
-                count: COUNTS.rank[String(l.rank) as "1" | "2" | "3" | "4"],
+                count: COUNTS.rank[String(l.rank) as "1" | "2" | "3" | "4" | "5"],
                 visual: <Meter rank={l.rank} variant="tall" />,
                 checked: filters.commonality.includes(l.rank),
                 toggle: () => update({ commonality: toggleIn(RANK_ORDER, filters.commonality, l.rank as Rank) }),
@@ -510,7 +511,7 @@ function AgentRow({ agent: a, open, onToggle }: { agent: Agent; open: boolean; o
           </div>
           <div className={styles.panelColApi}>
             <h3 className={styles.panelHeading}>In the Verisoul API</h3>
-            <CodeChip id={a.id} />
+            <ApiBlock agent={a} />
             <p className={styles.methodNote}>
               <strong>{a.method}:</strong> {methodInfo(a.method).meaning}
             </p>
@@ -522,28 +523,6 @@ function AgentRow({ agent: a, open, onToggle }: { agent: Agent; open: boolean; o
         </div>
       )}
     </li>
-  );
-}
-
-function CodeChip({ id }: { id: string }) {
-  const [copied, setCopied] = useState(false);
-  async function copy() {
-    try {
-      await navigator.clipboard.writeText(id);
-    } catch {}
-    setCopied(true);
-    window.setTimeout(() => setCopied(false), 1800);
-  }
-  return (
-    <div className="code-chip">
-      <code>
-        <span className="key">&quot;identified_agent&quot;</span>: &quot;{id}&quot;
-      </code>
-      <button type="button" className="copy-btn" onClick={copy} aria-label="Copy the identified_agent value">
-        <Icon name={copied ? "check" : "copy"} size={14} strokeWidth={2} />
-        {copied ? "Copied" : "Copy"}
-      </button>
-    </div>
   );
 }
 

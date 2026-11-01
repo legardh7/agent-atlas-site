@@ -1,0 +1,26 @@
+{
+  "_note": "Applied on top of agents.json at load time, so a data refresh from the kit keeps these. growing: slugs whose commonality is Growing. extraAgents: agents the API returns that the kit does not have yet.",
+  "growing": ["instinct", "meta-muse", "grok-bot", "claude-duet"],
+  "extraAgents": [
+    {
+      "slug": "claude-duet",
+      "id": "claude_duet",
+      "name": "Claude Duet",
+      "description": "Anthropic's cloud browser that Claude uses to browse the web and carry out tasks for a person.",
+      "aliases": ["Claude-Agent"],
+      "provider": "Anthropic",
+      "providerDomain": "anthropic.com",
+      "logo": "claude",
+      "monogram": null,
+      "type": "AI assistant",
+      "method": "Self-declared",
+      "rank": 4,
+      "signals": { "cryptographic": false, "network": true, "device": false, "behavior": true },
+      "signalDetails": {},
+      "declaresUserAgent": true,
+      "variants": null,
+      "count": 1,
+      "evidence": null
+    }
+  ]
+}

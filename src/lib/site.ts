@@ -17,8 +17,8 @@ export const SITE = {
     agentDetection: "https://www.verisoul.ai",
     docs: "https://docs.verisoul.ai",
     contact: "https://www.verisoul.ai/contact",
-    signedAgents: "https://docs.verisoul.ai",
-    api: "https://docs.verisoul.ai",
+    signedAgents: "https://docs.verisoul.ai/signals-scores/agent-detection",
+    api: "https://docs.verisoul.ai/signals-scores/agent-detection",
   },
 };
 

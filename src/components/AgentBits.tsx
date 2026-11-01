@@ -24,7 +24,7 @@ export function TypeLabel({ type, muted = true }: { type: AgentType; muted?: boo
   );
 }
 
-/** Four fixed slots: Cryptographic, Network, Device, Behavior. Lit when the agent uses that signal. */
+/** Four fixed slots: Cryptographic, Network, Device, Behavioral. Lit when the agent uses that signal. */
 export function SignalSlots({ agent, size = 30 }: { agent: Agent; size?: number }) {
   return (
     <span className="signal-slots">
@@ -48,11 +48,12 @@ export function SignalSlots({ agent, size = 30 }: { agent: Agent; size?: number 
   );
 }
 
-/** Commonality as a four-segment meter: Very common fills 4, Very uncommon fills 1 */
+/** Commonality as a four-segment meter: Very common fills 4, Very uncommon fills 1. Growing shows rising steps */
 export function Meter({ rank, variant }: { rank: Rank; variant?: "tall" | "big" }) {
-  const filled = 5 - rank;
+  const growing = rank === 5;
+  const filled = growing ? 2 : 5 - rank;
   return (
-    <span className={`meter${variant ? ` ${variant}` : ""}`} aria-hidden="true">
+    <span className={`meter${growing ? " growing" : ""}${variant ? ` ${variant}` : ""}`} aria-hidden="true">
       {[0, 1, 2, 3].map((i) => (
         <span key={i} className={i < filled ? "on" : undefined} />
       ))}

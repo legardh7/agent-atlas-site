@@ -1,4 +1,4 @@
-import { AGENTS, TOTAL_AGENTS, UPDATED, levelInfo } from "@/lib/atlas";
+import { AGENTS, TOTAL_AGENTS, UPDATED, apiAgent, levelInfo } from "@/lib/atlas";
 import { SITE } from "@/lib/site";
 
 /** Built once at deploy time and served as a static file */
@@ -24,6 +24,7 @@ export function GET() {
     type: a.type,
     method: a.method,
     commonality: levelInfo(a.rank).label,
+    agent: apiAgent(a),
     signals: a.signals,
     signalDetails: a.signalDetails,
     declaresUserAgent: a.declaresUserAgent,

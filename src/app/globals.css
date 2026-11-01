@@ -1,5 +1,5 @@
 /* Verisoul Agent Atlas: theme tokens and shared pieces.
-   Brand: Plus Jakarta Sans, one blue accent (#2160fd), navy text (#0f1e3d), panel (#f3f8ff). */
+   Brand: Youth for headings, Geist for text, one blue accent (#2160fd), navy text (#0f1e3d), panel (#f3f8ff). */
 
 :root {
   --bg: #ffffff;
@@ -26,8 +26,9 @@
   --code: #0f1e3d;
   --logo-filter: none;
   --shadow-pop: 0 12px 32px rgba(15, 30, 61, 0.12), 0 2px 6px rgba(15, 30, 61, 0.06);
-  --font-sans: "Plus Jakarta Sans", Inter, system-ui, -apple-system, "Segoe UI", sans-serif;
-  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --font-sans: "Geist", Inter, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-display: "Youth", "Geist", Inter, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
   --container: 1280px;
   --gutter: 32px;
   color-scheme: light;
@@ -306,4 +307,57 @@ p {
   background: var(--fg);
   color: var(--bg);
   border-color: var(--fg);
+}
+
+/* ---------- Agent block from the API ---------- */
+.api-block {
+  background: var(--code);
+  border-radius: 10px;
+  padding: 10px 12px 14px 16px;
+}
+.api-block-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.api-block-label {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #8cb0ff;
+}
+.api-block pre {
+  margin: 8px 0 0;
+  overflow-x: auto;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  line-height: 1.55;
+  color: #ffffff;
+}
+
+/* ---------- Growing: rising steps instead of a flat meter ---------- */
+.meter.growing {
+  align-items: flex-end;
+}
+.meter.growing span:nth-child(1) { height: 3px; }
+.meter.growing span:nth-child(2) { height: 5px; }
+.meter.growing span:nth-child(3) { height: 7px; }
+.meter.growing span:nth-child(4) { height: 9px; }
+.meter.growing.tall span:nth-child(1) { height: 4px; }
+.meter.growing.tall span:nth-child(2) { height: 7px; }
+.meter.growing.tall span:nth-child(3) { height: 10px; }
+.meter.growing.tall span:nth-child(4) { height: 13px; }
+.meter.growing.big span:nth-child(1) { height: 5px; }
+.meter.growing.big span:nth-child(2) { height: 9px; }
+.meter.growing.big span:nth-child(3) { height: 13px; }
+.meter.growing.big span:nth-child(4) { height: 17px; }
+
+/* ---------- Type: Youth for headings, Geist for everything else ---------- */
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-display);
 }

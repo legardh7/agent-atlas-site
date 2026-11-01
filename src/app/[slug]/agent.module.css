@@ -581,3 +581,10 @@ a.typePill:hover {
   line-height: 1.6;
   color: var(--soft);
 }
+
+.apiNote {
+  margin-top: 12px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: #c9d3e6;
+}

@@ -84,6 +84,15 @@ Three dates are set by hand, so update them on each refresh:
 - The month in the evidence line (`"in September 2026, per Cloudflare Radar"`), also in `scripts/build-data.py`
 - `LAST_MODIFIED` in `src/app/sitemap.ts`
 
+### Overrides (applied on top of the generated data)
+
+`src/data/overrides.json` survives a data refresh:
+
+- `growing`: slugs whose commonality shows as **Growing** (new and rising)
+- `extraAgents`: agents the Verisoul API already returns that the kit doesn't have yet (Claude Duet). Delete an entry once the kit includes it
+
+Signals on every page are set the way the API's `agent.detection_signals` sets them: signed agents show cryptographic and behavioral, self-declared show network and behavioral, inferred show network, device and behavioral, and headless automation always adds device.
+
 ### Fields in `src/data/agents.json`
 
 The file has `updated`, `counts` (totals by method, commonality, type and signal), `logos` (SVG path data on a 24 by 24 grid plus a brand color) and `agents`. Each agent has:

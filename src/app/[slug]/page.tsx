@@ -3,8 +3,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Icon } from "@/components/Icon";
 import { LogoTile, MethodPill, Meter } from "@/components/AgentBits";
-import { CopyButton } from "@/components/CopyButton";
-import { AGENTS, SIGNALS, agentsFromProvider, getAgent, levelInfo, methodInfo, typeInfo, type Agent, type SignalKey } from "@/lib/atlas";
+import { ApiBlock } from "@/components/ApiBlock";
+import { AGENTS, SIGNALS, apiAgent, agentsFromProvider, getAgent, levelInfo, methodInfo, typeInfo, type Agent, type SignalKey } from "@/lib/atlas";
 import { SITE, abs } from "@/lib/site";
 import { canBeFaked, howCommon, howToDetect, identifiesItself, whatItIs } from "@/lib/detection";
 import styles from "./agent.module.css";
@@ -62,7 +62,7 @@ export default async function AgentPage({ params }: Props) {
     { q: `How common is ${name}?`, a: howCommon(agent) },
     {
       q: `What does the Verisoul API return for ${name}?`,
-      a: `Every session Verisoul identifies as ${name} carries identified_agent: "${agent.id}", so you can allow, limit or block it by name.`,
+      a: `Every session Verisoul identifies as ${name} carries an agent block with id "${agent.id}", name, provider, type "${apiAgent(agent).type}", detection_method "${apiAgent(agent).detection_method}" and the detection_signals used (${apiAgent(agent).detection_signals.join(", ")}). Build rules on the id, type and detection method.`,
     },
   ];
   const jsonLd = {
@@ -166,9 +166,9 @@ export default async function AgentPage({ params }: Props) {
             </dd>
           </div>
           <div className={styles.fact}>
-            <dt>Verisoul API value</dt>
+            <dt>Agent id in the API</dt>
             <dd>
-              <code>identified_agent: &quot;{agent.id}&quot;</code>
+              <code>{agent.id}</code>
             </dd>
           </div>
           <div className={styles.fact}>
@@ -300,15 +300,13 @@ export default async function AgentPage({ params }: Props) {
             </h2>
             <p className={styles.apiLead}>
               {isFamily
-                ? `Every session Verisoul identifies as ${name} carries this value, with the region filled in`
-                : `Every session Verisoul identifies as ${name} carries this value`}
+                ? `Every session Verisoul identifies as ${name} carries this agent block, with the region filled in on the id`
+                : `Every session Verisoul identifies as ${name} carries this agent block`}
             </p>
-            <div className={`code-chip ${styles.chip}`}>
-              <code>
-                <span className="key">{'"identified_agent"'}</span>: {`"${agent.id}"`}
-              </code>
-              <CopyButton value={agent.id} what="the identified_agent value" />
-            </div>
+            <ApiBlock agent={agent} />
+            {!agent.signals.device && (
+              <p className={styles.apiNote}>detection_signals also includes device when the session shows signs of automation tools.</p>
+            )}
             <a href={SITE.links.api} className={styles.docs}>
               Read the docs
               <Icon name="arrow" size={16} strokeWidth={2} />

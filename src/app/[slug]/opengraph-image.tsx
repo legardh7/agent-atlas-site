@@ -140,7 +140,7 @@ export default async function Image({ params }: { params: Promise<{ slug: string
   const type = typeInfo(agent.type);
   const method = methodInfo(agent.method);
   const level = levelInfo(agent.rank);
-  const filled = 5 - agent.rank;
+  const filled = agent.rank === 5 ? 2 : 5 - agent.rank;
   const signed = agent.method === "Signed";
   const methodColor = signed ? BLUE : NAVY;
   const provider = providerLine(agent.provider);
