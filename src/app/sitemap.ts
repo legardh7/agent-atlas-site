@@ -15,15 +15,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "weekly" as const,
       priority: 0.7,
     })),
-    ...AGENTS.map((a) => {
-      const guide = GUIDES.some((g) => g.slug === a.slug);
-      return {
-        url: abs(`/${a.slug}`),
-        lastModified: guide ? GUIDES_UPDATED : LAST_MODIFIED,
-        changeFrequency: guide ? ("weekly" as const) : ("monthly" as const),
-        priority: guide ? 0.9 : 0.6,
-      };
-    }),
+    // Only entries with a full detection guide; the rest carry a googlebot noindex tag (see [slug]/page.tsx)
+    ...AGENTS.filter((a) => GUIDES.some((g) => g.slug === a.slug)).map((a) => ({
+      url: abs(`/${a.slug}`),
+      lastModified: GUIDES_UPDATED,
+      changeFrequency: "weekly" as const,
+      priority: 0.9,
+    })),
     // Detection guides that are pages of their own
     ...STANDALONE_GUIDES.map((g) => ({
       url: abs(`/${g.slug}`),
