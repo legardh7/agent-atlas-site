@@ -1,0 +1,5 @@
+{
+  "name": "agent-atlas",
+  "compatibility_date": "2025-08-16",
+  "kv_namespaces": [{ "binding": "NEXT_INC_CACHE_KV" }]
+}
