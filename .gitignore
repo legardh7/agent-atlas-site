@@ -4,3 +4,5 @@ out
 .vercel
 *.tsbuildinfo
 .env*.local
+.open-next
+.wrangler
