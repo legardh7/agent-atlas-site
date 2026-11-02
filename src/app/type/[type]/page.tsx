@@ -3,7 +3,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { TYPES } from "@/lib/atlas";
 import { agentsOfType } from "@/components/browse/BrowseAll";
-import { abs } from "@/lib/site";
+import { SITE, abs } from "@/lib/site";
+import { fitDescription, fitTitle } from "@/lib/seo";
 import styles from "@/components/browse/Browse.module.css";
 
 type Props = { params: Promise<{ type: string }> };
@@ -22,8 +23,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!t) return {};
   const n = agentsOfType(t.key).length;
   return {
-    title: `${plural(t.key)}: all ${n} and how to detect them`,
-    description: `${n} ${plural(t.key)} Verisoul can identify. ${t.meaning}. Each page explains how the agent is detected.`,
+    title: {
+      absolute: fitTitle([
+        `${plural(t.key)}: all ${n} and how to detect them | Verisoul`,
+        `${plural(t.key)}: all ${n} and how to detect them`,
+        `How to detect ${plural(t.key)} | Verisoul`,
+      ]),
+    },
+    description: fitDescription(`${n} ${plural(t.key)} Verisoul can identify. ${t.meaning}. Each page explains how the agent is detected.`),
     alternates: { canonical: abs(`/type/${t.slug}`) },
   };
 }
@@ -34,8 +41,36 @@ export default async function TypePage({ params }: Props) {
   if (!t) notFound();
   const list = agentsOfType(t.key);
 
+  const url = abs(`/type/${t.slug}`);
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "CollectionPage",
+        name: `${plural(t.key)} Verisoul can identify`,
+        description: t.meaning,
+        url,
+        isPartOf: { "@type": "WebSite", name: SITE.name, url: SITE.url },
+        mainEntity: {
+          "@type": "ItemList",
+          numberOfItems: list.length,
+          itemListElement: list.map((a, i) => ({ "@type": "ListItem", position: i + 1, name: a.name, url: abs(`/${a.slug}`) })),
+        },
+      },
+      {
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          { "@type": "ListItem", position: 1, name: "Verisoul", item: "https://www.verisoul.ai" },
+          { "@type": "ListItem", position: 2, name: "Agent Atlas", item: SITE.url },
+          { "@type": "ListItem", position: 3, name: plural(t.key), item: url },
+        ],
+      },
+    ],
+  };
+
   return (
     <main className={`container ${styles.page}`}>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <Link href="/" className={styles.back}>
         All agents
       </Link>

@@ -17,7 +17,7 @@ import {
   type Method,
   type SignalKey,
 } from "@/lib/atlas";
-import { GUIDES_UPDATED, guideMembers, readingMinutes, type Guide } from "@/lib/guides";
+import { GUIDES, GUIDES_UPDATED, guideMembers, guideName, readingMinutes, type Guide } from "@/lib/guides";
 import { lookAlikes } from "@/lib/detection";
 import type { IconName } from "@/lib/icons";
 import { SITE, abs } from "@/lib/site";
@@ -172,7 +172,7 @@ export function GuidePage({ guide, agent }: { guide: Guide; agent: Agent | null 
 
       <div className={styles.pills}>
         {agent ? (
-          <Link href={`/?type=${typeInfo(agent.type).slug}`} className={`pill outline ${styles.typePill}`}>
+          <Link href={`/type/${typeInfo(agent.type).slug}`} className={`pill outline ${styles.typePill}`}>
             <Icon name={typeInfo(agent.type).icon} size={15} />
             <span className="sr-only">Type: </span>
             {agent.type}
@@ -306,6 +306,34 @@ export function GuidePage({ guide, agent }: { guide: Guide; agent: Agent | null 
               <AgentRows agents={related} />
             </section>
           )}
+
+          {(() => {
+            // Other guides in the same group first, then the rest, so every guide links to several others
+            const group = GUIDES.filter((x) => x.group === guide.group);
+            const at = group.findIndex((x) => x.slug === guide.slug);
+            const same = [...group.slice(at + 1), ...group.slice(0, at)];
+            const rest = GUIDES.filter((x) => x.group !== guide.group);
+            const more = [...same, ...rest].slice(0, 6);
+            return (
+              <section aria-labelledby="more-guides">
+                <h2 id="more-guides" className={styles.h2}>
+                  More detection guides
+                </h2>
+                <ul className={styles.rows}>
+                  {more.map((x) => (
+                    <li key={x.slug}>
+                      <Link href={`/${x.slug}`} className={styles.row}>
+                        <span className={styles.rowText}>
+                          <span className={styles.rowName}>How to detect {guideName(x)}</span>
+                          <span className={styles.rowDesc}>{x.groupName}</span>
+                        </span>
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            );
+          })()}
 
           <section aria-labelledby="faq">
             <h2 id="faq" className={styles.h2}>
