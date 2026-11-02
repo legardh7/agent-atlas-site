@@ -57,6 +57,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     },
     description,
     alternates: { canonical: url },
+    // Entries without a full detection guide stay out of Google's index (thin, templated pages) while
+    // Bing and AI crawlers can still index them; links stay followable so the guides keep their link value
+    robots: { googleBot: { index: false, follow: true } },
     openGraph: {
       type: "website",
       siteName: SITE.name,
