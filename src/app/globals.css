@@ -36,9 +36,9 @@
   --code: #0f1e3d;
   --logo-filter: none;
   --shadow-pop: 0 12px 32px rgba(15, 30, 61, 0.12), 0 2px 6px rgba(15, 30, 61, 0.06);
-  --font-sans: "Geist", Inter, system-ui, -apple-system, "Segoe UI", sans-serif;
-  --font-display: "Youth", "Geist", Inter, system-ui, -apple-system, "Segoe UI", sans-serif;
-  --font-mono: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --font-sans: var(--font-geist-sans), "Geist", Inter, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-display: "Youth", var(--font-geist-sans), "Geist", Inter, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: var(--font-geist-mono), "Geist Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
   --container: 1280px;
   --gutter: 32px;
   color-scheme: light;

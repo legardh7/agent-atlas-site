@@ -1,9 +1,11 @@
 import type { Metadata, Viewport } from "next";
+import { GeistSans } from "geist/font/sans";
+import { GeistMono } from "geist/font/mono";
 import "./globals.css";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { themeInitScript } from "@/components/ThemeToggle";
-import { ORIGIN, SITE } from "@/lib/site";
+import { ORIGIN, SITE, asset } from "@/lib/site";
 
 export const metadata: Metadata = {
   metadataBase: new URL(`${ORIGIN}/`),
@@ -29,16 +31,11 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" className={`${GeistSans.variable} ${GeistMono.variable}`} suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
-        {/* eslint-disable-next-line @next/next/no-page-custom-font */}
-        <link
-          rel="stylesheet"
-          href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800&family=Geist+Mono:wght@400;500&display=swap"
-        />
+        <link rel="preload" href="https://cdn.prod.website-files.com/6627605478f226ce86d5c27f/fonts/6ae7ac0bb3d4b53d7696c31f-Youth-Medium.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
+        <link rel="alternate" type="text/plain" title="llms.txt" href={asset("/llms.txt")} />
       </head>
       <body>
         <SiteHeader />

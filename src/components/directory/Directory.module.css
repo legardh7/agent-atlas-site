@@ -630,7 +630,7 @@
 
 .tabCount {
   font-weight: 500;
-  color: var(--faint);
+  color: var(--muted);
   font-variant-numeric: tabular-nums;
 }
 

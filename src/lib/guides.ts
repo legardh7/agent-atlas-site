@@ -42,7 +42,7 @@ export interface Guide {
   body: Block[];
   faq: { q: string; a: string }[];
   sources: { title: string; url: string }[];
-  shots: { src: string; alt: string; caption: string; tall: boolean }[];
+  shots: { src: string; alt: string; caption: string; tall: boolean; width?: number; height?: number }[];
   /** API id to highlight in the agent-share chart, when the guide has one */
   chart: string | null;
   logo: { src: string; full: boolean } | { atlas: string };
