@@ -61,7 +61,7 @@
   text-underline-offset: 3px;
 }
 
-.guide code {
+.guide :not(pre) > code {
   font-family: var(--font-mono);
   font-size: 0.86em;
   background: var(--chip);
