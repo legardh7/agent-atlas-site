@@ -309,7 +309,8 @@
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  background: var(--logo-tile);
+  /* white, so product marks that ship on a white square don't show a box */
+  background: #ffffff;
   box-shadow: inset 0 0 0 1px var(--logo-tile-line);
 }
 

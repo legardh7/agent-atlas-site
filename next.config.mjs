@@ -2,6 +2,8 @@
 const nextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
+  // Inline the (small) CSS into each page so nothing blocks the first paint on a second connection
+  experimental: { inlineCss: true },
   // basePath and assetPrefix are set by Webflow Cloud from the /agents mount; don't set them here.
   async headers() {
     const week = "public, max-age=604800, stale-while-revalidate=2592000";
