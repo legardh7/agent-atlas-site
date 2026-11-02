@@ -26,7 +26,7 @@ export function SiteFooter() {
               </ul>
             </div>
             <div>
-              <h2 style={{ fontSize: 18, fontWeight: 700, marginBottom: 18 }}>The four signals</h2>
+              <h2 style={{ fontSize: 18, fontWeight: 700, marginBottom: 18 }}>Four signal categories</h2>
               <ul style={{ listStyle: "none", margin: 0, padding: 0, display: "flex", flexDirection: "column", gap: 16 }}>
                 {SIGNALS.map((s) => (
                   <li key={s.key} style={{ display: "flex", gap: 12, alignItems: "flex-start" }}>
