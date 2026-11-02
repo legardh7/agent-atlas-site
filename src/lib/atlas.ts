@@ -237,3 +237,37 @@ export function searchText(a: Agent): string {
 export function siteIcon(agent: Agent): string | null {
   return agent.providerDomain ? `https://www.google.com/s2/favicons?domain=${encodeURIComponent(agent.providerDomain)}&sz=64` : null;
 }
+
+/** Plural for headings, e.g. "AI crawlers", "headless automation tools" */
+export function typePluralLower(type: AgentType): string {
+  return (
+    {
+      "AI agent": "AI agents",
+      "AI assistant": "AI assistants",
+      "AI crawler": "AI crawlers",
+      Crawler: "crawlers",
+      "Headless automation": "headless automation tools",
+      Other: "automated agents",
+    } as Record<AgentType, string>
+  )[type];
+}
+
+/**
+ * Neighbors of the same type in directory order (wrapping around), skipping ones already
+ * listed. Gives every page links to a few others so none is reachable only from the index.
+ */
+export function similarAgents(agent: Agent, exclude: Agent[] = [], limit = 6): Agent[] {
+  const list = AGENTS.filter((a) => a.type === agent.type).sort((a, b) => a.order - b.order);
+  const skip = new Set([agent.slug, ...exclude.map((a) => a.slug)]);
+  const i = list.findIndex((a) => a.slug === agent.slug);
+  const out: Agent[] = [];
+  for (let k = 1; k < list.length && out.length < limit; k++) {
+    for (const a of [list[(i + k) % list.length], list[(i - k + list.length) % list.length]]) {
+      if (out.length < limit && !skip.has(a.slug)) {
+        skip.add(a.slug);
+        out.push(a);
+      }
+    }
+  }
+  return out;
+}

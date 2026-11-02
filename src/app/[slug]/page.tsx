@@ -4,8 +4,9 @@ import { notFound } from "next/navigation";
 import { Icon } from "@/components/Icon";
 import { LogoTile, MethodPill, Meter } from "@/components/AgentBits";
 import { ApiBlock } from "@/components/ApiBlock";
-import { AGENTS, SIGNALS, apiAgent, agentsFromProvider, getAgent, levelInfo, methodInfo, typeInfo, type Agent, type SignalKey } from "@/lib/atlas";
+import { AGENTS, SIGNALS, apiAgent, agentsFromProvider, getAgent, similarAgents, typePluralLower, levelInfo, methodInfo, typeInfo, type Agent, type SignalKey } from "@/lib/atlas";
 import { SITE, abs } from "@/lib/site";
+import { fitDescription, fitTitle, namedDescription } from "@/lib/seo";
 import { canBeFaked, howCommon, howToDetect, identifiesItself, lookAlikes, whatItIs } from "@/lib/detection";
 import { STANDALONE_GUIDES, getGuide, guideName } from "@/lib/guides";
 import { GuidePage, plain } from "./GuidePage";
@@ -26,10 +27,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (guide) {
     const name = guideName(guide);
     const url = abs(`/${guide.slug}`);
-    const description = plain(guide.dek);
+    const description = fitDescription(plain(guide.dek));
     const image = guide.shots[0] ? `${SITE.url}${guide.shots[0].src}` : undefined;
     return {
-      title: `How to detect ${name}`,
+      title: { absolute: fitTitle([`How to detect ${name} | ${SITE.name}`, `How to detect ${name} | Verisoul`, `How to detect ${name}`]) },
       description,
       alternates: { canonical: url },
       openGraph: {
@@ -43,10 +44,17 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     };
   }
   if (!agent) return {};
-  const description = `${sentence(agent.description)} ${howWeKnow(agent)}`;
+  const description = fitDescription(`${namedDescription(agent.name, agent.description)} ${howWeKnow(agent)}`);
   const url = abs(`/${agent.slug}`);
   return {
-    title: `${agent.name}: what it is and how to detect it`,
+    title: {
+      absolute: fitTitle([
+        `${agent.name}: what it is and how to detect it | Verisoul`,
+        `${agent.name}: what it is and how to detect it`,
+        `How to detect ${agent.name} | Verisoul`,
+        `How to detect ${agent.name}`,
+      ]),
+    },
     description,
     alternates: { canonical: url },
     openGraph: {
@@ -73,6 +81,7 @@ export default async function AgentPage({ params }: Props) {
   const openSource = provider === "Open source";
   const providerHref = `/?q=${encodeURIComponent(provider)}`;
   const related = unknownProvider ? [] : agentsFromProvider(agent, 6);
+  const similar = similarAgents(agent, related, 6);
   const regions = agent.variants && agent.variants.length > 0 ? agent.variants : null;
   const isFamily = agent.id.includes("<region>");
   const lead = howToDetect(agent);
@@ -140,7 +149,7 @@ export default async function AgentPage({ params }: Props) {
       </section>
 
       <div className={styles.pills}>
-        <Link href={`/?type=${type.slug}`} className={`pill outline ${styles.typePill}`}>
+        <Link href={`/type/${type.slug}`} className={`pill outline ${styles.typePill}`}>
           <Icon name={type.icon} size={15} />
           <span className="sr-only">Type: </span>
           {agent.type}
@@ -261,6 +270,33 @@ export default async function AgentPage({ params }: Props) {
               </h2>
               <ul className={styles.rows}>
                 {related.map((a) => (
+                  <li key={a.slug}>
+                    <Link href={`/${a.slug}`} className={styles.row}>
+                      <span className={styles.rowText}>
+                        <span className={styles.rowName}>{a.name}</span>
+                        <span className={styles.rowDesc}>{a.description}</span>
+                      </span>
+                      <span className={styles.rowMethod}>
+                        <MethodPill method={a.method} />
+                      </span>
+                      <span className={styles.rowLevel}>
+                        <Meter rank={a.rank} />
+                        <span className="sr-only">How common: </span>
+                        {levelInfo(a.rank).label}
+                      </span>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )}
+          {similar.length > 0 && (
+            <section aria-labelledby="similar">
+              <h2 id="similar" className={styles.h2}>
+                More {typePluralLower(agent.type)}
+              </h2>
+              <ul className={styles.rows}>
+                {similar.map((a) => (
                   <li key={a.slug}>
                     <Link href={`/${a.slug}`} className={styles.row}>
                       <span className={styles.rowText}>
