@@ -21,7 +21,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
         url: abs(`/${a.slug}`),
         lastModified: guide ? GUIDES_UPDATED : LAST_MODIFIED,
         changeFrequency: guide ? ("weekly" as const) : ("monthly" as const),
-        priority: guide ? 0.8 : 0.6,
+        priority: guide ? 0.9 : 0.6,
       };
     }),
     // Detection guides that are pages of their own
@@ -29,7 +29,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       url: abs(`/${g.slug}`),
       lastModified: GUIDES_UPDATED,
       changeFrequency: "weekly" as const,
-      priority: 0.8,
+      priority: 0.9,
     })),
   ];
 }
