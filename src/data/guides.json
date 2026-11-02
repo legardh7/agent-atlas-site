@@ -217,13 +217,17 @@
      "src": "/guides/meta-muse-phone.jpg",
      "alt": "Muse on iPhone finding strollers and asking the user to approve a checkout",
      "caption": "Muse shops, then asks before it places an order with a saved card",
-     "tall": false
+     "tall": false,
+     "width": 1260,
+     "height": 709
     },
     {
      "src": "/guides/meta-muse-mac.jpg",
      "alt": "Muse's Mac app asking to move files to Trash",
      "caption": "On the Mac, Muse asks permission before it acts, here to move old downloads to Trash",
-     "tall": false
+     "tall": false,
+     "width": 1400,
+     "height": 1353
     }
    ],
    "chart": "meta_muse",
@@ -427,7 +431,9 @@
      "src": "/guides/chatgpt-dots.jpg",
      "alt": "A ChatGPT dot working beside its own browser",
      "caption": "A dot works in ChatGPT with its own browser open beside the chat",
-     "tall": false
+     "tall": false,
+     "width": 1400,
+     "height": 787
     }
    ],
    "chart": "chatgpt_agent",
@@ -627,7 +633,9 @@
      "src": "/guides/claude-duet.jpg",
      "alt": "Claude Duet app showing channels, tasks and a drafted email",
      "caption": "Claude Duet keeps channels and tasks, and drafts work like this email for approval",
-     "tall": false
+     "tall": false,
+     "width": 1400,
+     "height": 787
     }
    ],
    "chart": "claude_duet",
@@ -840,7 +848,9 @@
      "src": "/guides/grok-bot.jpg",
      "alt": "Grok Bot named agents such as Chief of Staff and Inbox Manager",
      "caption": "Grok Bot agents each get a name, a job and their own cloud computer",
-     "tall": false
+     "tall": false,
+     "width": 1400,
+     "height": 728
     }
    ],
    "chart": null,
@@ -1037,7 +1047,9 @@
      "src": "/guides/instinct.jpg",
      "alt": "Instinct completing a grocery order over iMessage",
      "caption": "Instinct works over iMessage, here finishing a grocery order",
-     "tall": true
+     "tall": true,
+     "width": 678,
+     "height": 1400
     }
    ],
    "chart": "instinct",
@@ -1855,7 +1867,9 @@
      "src": "/guides/manus.jpg",
      "alt": "Manus browsing a website in its own cloud computer",
      "caption": "Manus works in its own cloud browser, shown live beside the chat",
-     "tall": false
+     "tall": false,
+     "width": 1400,
+     "height": 718
     }
    ],
    "chart": null,
@@ -3460,7 +3474,9 @@
      "src": "/guides/openclaw.jpg",
      "alt": "OpenClaw documentation home page",
      "caption": "OpenClaw's docs: a gateway that connects agents to chat apps and tools",
-     "tall": false
+     "tall": false,
+     "width": 1400,
+     "height": 1261
     }
    ],
    "chart": null,
@@ -3884,7 +3900,9 @@
      "src": "/guides/hermes-agent.jpg",
      "alt": "Hermes Workspace with agent profiles",
      "caption": "The Hermes Workspace, where each agent profile has its own skills and sessions",
-     "tall": false
+     "tall": false,
+     "width": 1400,
+     "height": 765
     }
    ],
    "chart": null,

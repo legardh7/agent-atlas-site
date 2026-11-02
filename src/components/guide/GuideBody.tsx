@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
-import { asset } from "@/lib/site";
+import { asset, optimized } from "@/lib/site";
 import { AGENT_SHARE, type Block, type Guide } from "@/lib/guides";
 import styles from "./guide.module.css";
 
@@ -128,7 +128,7 @@ function BlockView({ block: b, guide, name, api }: { block: Block; guide: Guide;
           {guide.shots.map((s) => (
             <figure key={s.src} className={`${styles.shot}${s.tall ? ` ${styles.tall}` : ""}`}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={asset(s.src)} alt={s.alt} loading="lazy" decoding="async" />
+              <img src={asset(optimized(s.src))} alt={s.alt} width={s.width} height={s.height} loading="lazy" decoding="async" />
               <figcaption>{s.caption}</figcaption>
             </figure>
           ))}

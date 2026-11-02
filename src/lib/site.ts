@@ -27,6 +27,11 @@ export function asset(path: string): string {
   return `${BASE_PATH}${path.startsWith("/") ? path : `/${path}`}`;
 }
 
+/** The small WebP copy of a guide image or the header logo (made by scripts/optimize-images.mjs) */
+export function optimized(path: string): string {
+  return /^\/(guides\/|verisoul-logo\.png$)/.test(path) ? path.replace(/\.(png|jpe?g)$/i, ".webp") : path;
+}
+
 /** Absolute public URL for a path inside the Atlas, e.g. abs("/meta-muse") */
 export function abs(path = "/"): string {
   const p = path === "/" || path === "" ? "" : path.startsWith("/") ? path : `/${path}`;
