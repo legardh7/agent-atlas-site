@@ -6,7 +6,9 @@ import { LogoTile, MethodPill, Meter } from "@/components/AgentBits";
 import { ApiBlock } from "@/components/ApiBlock";
 import { AGENTS, SIGNALS, apiAgent, agentsFromProvider, getAgent, levelInfo, methodInfo, typeInfo, type Agent, type SignalKey } from "@/lib/atlas";
 import { SITE, abs } from "@/lib/site";
-import { canBeFaked, howCommon, howToDetect, identifiesItself, whatItIs } from "@/lib/detection";
+import { canBeFaked, howCommon, howToDetect, identifiesItself, lookAlikes, whatItIs } from "@/lib/detection";
+import { STANDALONE_GUIDES, getGuide, guideName } from "@/lib/guides";
+import { GuidePage, plain } from "./GuidePage";
 import styles from "./agent.module.css";
 
 type Props = { params: Promise<{ slug: string }> };
@@ -14,12 +16,32 @@ type Props = { params: Promise<{ slug: string }> };
 /** Unknown slugs still 404 (notFound below). Pages render on request when the host has no prerender cache, as on Webflow Cloud */
 
 export function generateStaticParams() {
-  return AGENTS.map((a) => ({ slug: a.slug }));
+  return [...AGENTS.map((a) => ({ slug: a.slug })), ...STANDALONE_GUIDES.map((g) => ({ slug: g.slug }))];
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const agent = getAgent(slug);
+  const guide = getGuide(slug);
+  if (guide) {
+    const name = guideName(guide);
+    const url = abs(`/${guide.slug}`);
+    const description = plain(guide.dek);
+    const image = guide.shots[0] ? `${SITE.url}${guide.shots[0].src}` : undefined;
+    return {
+      title: `How to detect ${name}`,
+      description,
+      alternates: { canonical: url },
+      openGraph: {
+        type: "article",
+        siteName: SITE.name,
+        url,
+        title: `How to detect ${name} | ${SITE.name}`,
+        description,
+        ...(image ? { images: [{ url: image }] } : {}),
+      },
+    };
+  }
   if (!agent) return {};
   const description = `${sentence(agent.description)} ${howWeKnow(agent)}`;
   const url = abs(`/${agent.slug}`);
@@ -40,6 +62,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function AgentPage({ params }: Props) {
   const { slug } = await params;
   const agent = getAgent(slug);
+  const guide = getGuide(slug);
+  if (guide) return <GuidePage guide={guide} agent={agent ?? null} />;
   if (!agent) notFound();
 
   const { name, provider } = agent;
@@ -326,22 +350,6 @@ function methodIntro(agent: Agent): string {
         : `${name} identifies itself through its own markers in the browser. Those can be faked, so we only label a session ${name} when the other signals check out too.`;
     case "Inferred":
       return `${name} doesn't announce itself. We recognize it from a combination of signals that together point to one agent.`;
-  }
-}
-
-function lookAlikes(agent: Agent): string {
-  const { name, provider } = agent;
-  switch (agent.method) {
-    case "Signed": {
-      const owner = provider === "Unknown" ? "its operator's" : possessive(provider);
-      return `Signatures can't be copied. A bot pretending to be ${name} without ${owner} signing keys won't be labeled ${name}.`;
-    }
-    case "Self-declared":
-      return agent.declaresUserAgent
-        ? `A bot that copies ${possessive(name)} user agent from somewhere else won't be labeled ${name}, because the rest of the signals won't match.`
-        : `A bot that fakes one of ${possessive(name)} markers won't be labeled ${name}, because the rest of the signals won't match.`;
-    case "Inferred":
-      return `We only label a session ${name} when several signals agree, so one matching trait isn't enough.`;
   }
 }
 

@@ -1,6 +1,9 @@
 import { AGENTS, TOTAL_AGENTS, TYPES, UPDATED, methodInfo } from "@/lib/atlas";
 import { SITE, abs } from "@/lib/site";
 import { detectionLead } from "@/lib/detection";
+import { GUIDES, GUIDE_GROUPS, guideName } from "@/lib/guides";
+
+const plain = (t: string) => t.replace(/\[([^\]]+)\]\([^)]+\)/g, "$1").replace(/`/g, "");
 
 export const dynamic = "force-static";
 
@@ -17,7 +20,16 @@ export function GET() {
     "",
     ...(["Signed", "Self-declared", "Inferred"] as const).map((m) => `- ${m}: ${methodInfo(m).meaning}`),
     "",
+    "## Detection guides",
+    "",
+    `In-depth guides to the ${GUIDES.length} agents, AI browsers, automation tools and crawlers people ask about most, with who makes each one, how it shows up on a site and how Verisoul detects it.`,
+    "",
   ];
+  for (const group of GUIDE_GROUPS) {
+    lines.push(`### ${group.name}`, "");
+    for (const g of GUIDES.filter((x) => x.group === group.id)) lines.push(`- [How to detect ${guideName(g)}](${abs(`/${g.slug}`)}): ${plain(g.answer)}`);
+    lines.push("");
+  }
   for (const t of TYPES) {
     const list = AGENTS.filter((a) => a.type === t.key).sort((a, b) => a.order - b.order);
     if (list.length === 0) continue;

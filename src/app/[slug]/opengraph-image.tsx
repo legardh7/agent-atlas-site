@@ -4,6 +4,7 @@ import { ImageResponse } from "next/og";
 import { ICONS, type IconName } from "@/lib/icons";
 import { AGENTS, LOGOS, SIGNALS, getAgent, levelInfo, methodInfo, typeInfo, type Agent } from "@/lib/atlas";
 import { ORIGIN, SITE, asset } from "@/lib/site";
+import { STANDALONE_GUIDES, getGuide } from "@/lib/guides";
 
 export const alt = "Verisoul Agent Atlas card: who runs this agent, what kind it is, how common it is and which signals Verisoul uses to identify it";
 export const size = { width: 1200, height: 630 };
@@ -13,7 +14,7 @@ export const contentType = "image/png";
 /** Unknown slugs still 404 (notFound below). Pages render on request when the host has no prerender cache, as on Webflow Cloud */
 
 export function generateStaticParams() {
-  return AGENTS.map((a) => ({ slug: a.slug }));
+  return [...AGENTS.map((a) => ({ slug: a.slug })), ...STANDALONE_GUIDES.map((g) => ({ slug: g.slug }))];
 }
 
 const NAVY = "#0f1e3d";
@@ -58,29 +59,29 @@ function StrokeIcon({ name, size, color }: { name: IconName; size: number; color
   );
 }
 
-/** The agent's full-color logo file as a data URI (Satori draws it like any image) */
-async function logoDataUri(agent: Agent): Promise<string | null> {
-  const logo = agent.logo ? LOGOS[agent.logo] : null;
-  if (!logo) return null;
+/** A logo file under /public as a data URI (Satori draws it like any image) */
+async function logoDataUri(src: string | null): Promise<string | null> {
+  if (!src) return null;
+  const mime = src.endsWith(".png") ? "image/png" : src.endsWith(".jpg") ? "image/jpeg" : "image/svg+xml";
   try {
-    const svg = readFileSync(join(process.cwd(), "public", logo.src));
-    return `data:image/svg+xml;base64,${svg.toString("base64")}`;
+    const file = readFileSync(join(process.cwd(), "public", src));
+    return `data:${mime};base64,${file.toString("base64")}`;
   } catch {
     // No file system at request time on the edge: fetch the public file instead
     try {
-      const res = await fetch(`${ORIGIN}${asset(logo.src)}`);
+      const res = await fetch(`${ORIGIN}${asset(src)}`);
       if (!res.ok) return null;
       const bytes = new Uint8Array(await res.arrayBuffer());
       let bin = "";
       for (const b of bytes) bin += String.fromCharCode(b);
-      return `data:image/svg+xml;base64,${btoa(bin)}`;
+      return `data:${mime};base64,${btoa(bin)}`;
     } catch {
       return null;
     }
   }
 }
 
-function LogoTile({ agent, logo }: { agent: Agent; logo: string | null }) {
+function LogoTile({ monogram, logo }: { monogram: string; logo: string | null }) {
   return (
     <div
       style={{
@@ -99,7 +100,7 @@ function LogoTile({ agent, logo }: { agent: Agent; logo: string | null }) {
         <img src={logo} width={72} height={72} style={{ objectFit: "contain" }} />
       ) : (
         <div style={{ display: "flex", fontSize: 50, color: MUTED, letterSpacing: 1, ...bold(1.6, MUTED) }}>
-          {agent.monogram ?? agent.name.slice(0, 1).toUpperCase()}
+          {monogram}
         </div>
       )}
     </div>
@@ -134,20 +135,48 @@ export default async function Image({ params }: { params: Promise<{ slug: string
   // Next 15.5 hands image routes a plain object and newer versions a Promise; awaiting covers both
   const { slug } = await params;
   const agent = getAgent(slug);
-  if (!agent) return new Response("Not found", { status: 404 });
-  const logo = await logoDataUri(agent);
+  const guide = getGuide(slug);
+  const s = !agent && guide?.standalone ? guide.standalone : null;
+  if (!agent && !s) return new Response("Not found", { status: 404 });
 
-  const type = typeInfo(agent.type);
-  const method = methodInfo(agent.method);
-  const level = levelInfo(agent.rank);
-  const filled = agent.rank === 5 ? 2 : 5 - agent.rank;
-  const signed = agent.method === "Signed";
-  const methodColor = signed ? BLUE : NAVY;
-  const provider = providerLine(agent.provider);
+  // A detection guide that is a page of its own gets the same card, with "Not named yet" when the API doesn't name it
+  const card = agent
+    ? {
+        name: agent.name,
+        provider: agent.provider,
+        monogram: agent.monogram ?? agent.name.slice(0, 1).toUpperCase(),
+        logoSrc: agent.logo ? LOGOS[agent.logo]?.src ?? null : null,
+        typeLabel: agent.type as string,
+        typeIcon: typeInfo(agent.type).icon,
+        methodLabel: agent.method as string,
+        methodIcon: methodInfo(agent.method).icon,
+        signed: agent.method === "Signed",
+        rank: agent.rank,
+        third: levelInfo(agent.rank).label,
+        signals: agent.signals,
+      }
+    : {
+        name: s!.name,
+        provider: s!.provider,
+        monogram: s!.name.slice(0, 1).toUpperCase(),
+        logoSrc: "src" in guide!.logo ? guide!.logo.src : LOGOS[guide!.logo.atlas]?.src ?? null,
+        typeLabel: s!.typeLabel,
+        typeIcon: "bot" as IconName,
+        methodLabel: s!.named === false || !s!.method ? "Not named yet" : s!.method,
+        methodIcon: (s!.named === false || !s!.method ? "inferred" : methodInfo(s!.method).icon) as IconName,
+        signed: s!.named !== false && s!.method === "Signed",
+        rank: null,
+        third: "Detection guide",
+        signals: Object.fromEntries(SIGNALS.map((x) => [x.key, s!.signals.includes(x.key)])) as Agent["signals"],
+      };
+  const logo = await logoDataUri(card.logoSrc);
+  const filled = card.rank === null ? 0 : card.rank === 5 ? 2 : 5 - card.rank;
+  const methodColor = card.signed ? BLUE : NAVY;
+  const provider = providerLine(card.provider);
   const host = SITE.url.replace(/^https?:\/\//, "").replace(/\/+$/, "");
-  const fs = nameSize(agent.name);
+  const fs = nameSize(card.name);
   // The longest combination ("Headless automation", "Self-declared", "Very common") needs smaller type to fit
-  const factSize = agent.type.length + agent.method.length + level.label.length > 38 ? 28 : 32;
+  const factSize = card.typeLabel.length + card.methodLabel.length + card.third.length > 38 ? 28 : 32;
 
   return new ImageResponse(
     (
@@ -161,9 +190,9 @@ export default async function Image({ params }: { params: Promise<{ slug: string
 
           {/* Logo, name and provider */}
           <div style={{ display: "flex", alignItems: "center" }}>
-            <LogoTile agent={agent} logo={logo} />
+            <LogoTile monogram={card.monogram} logo={logo} />
             <div style={{ display: "flex", flexDirection: "column", marginLeft: 36, maxWidth: 890 }}>
-              <div style={{ display: "flex", fontSize: fs, lineHeight: 1.08, ...bold(fs >= 64 ? 2.6 : 2.2, NAVY) }}>{agent.name}</div>
+              <div style={{ display: "flex", fontSize: fs, lineHeight: 1.08, ...bold(fs >= 64 ? 2.6 : 2.2, NAVY) }}>{card.name}</div>
               <div style={{ display: "flex", marginTop: 14, fontSize: 30, color: MUTED }}>{provider}</div>
             </div>
           </div>
@@ -171,14 +200,15 @@ export default async function Image({ params }: { params: Promise<{ slug: string
           {/* Type, method, commonality */}
           <div style={{ display: "flex" }}>
             <Fact label="Type" first>
-              <StrokeIcon name={type.icon} size={30} color={MUTED} />
-              <div style={{ display: "flex", marginLeft: 12, fontSize: factSize, ...bold(0.8, NAVY) }}>{agent.type}</div>
+              <StrokeIcon name={card.typeIcon} size={30} color={MUTED} />
+              <div style={{ display: "flex", marginLeft: 12, fontSize: factSize, ...bold(0.8, NAVY) }}>{card.typeLabel}</div>
             </Fact>
             <Fact label="Method">
-              <StrokeIcon name={method.icon} size={30} color={methodColor} />
-              <div style={{ display: "flex", marginLeft: 12, fontSize: factSize, color: methodColor, ...bold(0.8, methodColor) }}>{agent.method}</div>
+              <StrokeIcon name={card.methodIcon} size={30} color={methodColor} />
+              <div style={{ display: "flex", marginLeft: 12, fontSize: factSize, color: methodColor, ...bold(0.8, methodColor) }}>{card.methodLabel}</div>
             </Fact>
-            <Fact label="Commonality" last>
+            <Fact label={card.rank === null ? "Page" : "Commonality"} last>
+              {card.rank !== null && (
               <div style={{ display: "flex" }}>
                 {[0, 1, 2, 3].map((i) => (
                   <div
@@ -187,7 +217,8 @@ export default async function Image({ params }: { params: Promise<{ slug: string
                   />
                 ))}
               </div>
-              <div style={{ display: "flex", marginLeft: 10, fontSize: factSize, ...bold(0.8, NAVY) }}>{level.label}</div>
+              )}
+              <div style={{ display: "flex", marginLeft: 10, fontSize: factSize, ...bold(0.8, NAVY) }}>{card.third}</div>
             </Fact>
           </div>
 
@@ -196,7 +227,7 @@ export default async function Image({ params }: { params: Promise<{ slug: string
             <div style={{ display: "flex", fontSize: 22, color: MUTED }}>How Verisoul identifies it</div>
             <div style={{ display: "flex", marginTop: 14 }}>
               {SIGNALS.map((s) => {
-                const on = agent.signals[s.key];
+                const on = card.signals[s.key];
                 const fg = on ? NAVY : SIG_OFF_FG;
                 return (
                   <div
