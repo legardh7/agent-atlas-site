@@ -20,8 +20,8 @@ export function SiteHeader() {
             Docs
           </a>
           <ThemeToggle />
-          <a href={SITE.links.contact} className="btn primary site-cta" style={{ height: 38, padding: "0 16px", fontSize: 14, whiteSpace: "nowrap" }}>
-            Talk to us
+          <a href={SITE.links.bookDemo} className="btn primary site-cta" style={{ height: 38, padding: "0 16px", fontSize: 14, whiteSpace: "nowrap" }}>
+            Book a demo
           </a>
         </nav>
       </div>
