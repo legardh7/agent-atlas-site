@@ -17,7 +17,7 @@ import {
   type Method,
   type SignalKey,
 } from "@/lib/atlas";
-import { GUIDES, GUIDES_UPDATED, guideMembers, guideName, readingMinutes, type Guide } from "@/lib/guides";
+import { GUIDES, GUIDES_UPDATED, guideMembers, guideName, guideUpdated, readingMinutes, type Guide } from "@/lib/guides";
 import { lookAlikes } from "@/lib/detection";
 import type { IconName } from "@/lib/icons";
 import { SITE, abs } from "@/lib/site";
@@ -106,7 +106,7 @@ export function GuidePage({ guide, agent }: { guide: Guide; agent: Agent | null 
         description: plain(guide.dek),
         abstract: plain(guide.answer),
         datePublished: GUIDES_UPDATED,
-        dateModified: GUIDES_UPDATED,
+        dateModified: guideUpdated(guide),
         author: { "@type": "Organization", name: "Verisoul Research", url: SITE.links.home },
         publisher: { "@type": "Organization", name: "Verisoul", url: SITE.links.home },
         mainEntityOfPage: url,
@@ -205,7 +205,7 @@ export function GuidePage({ guide, agent }: { guide: Guide; agent: Agent | null 
         <strong>Verisoul Research</strong>
         <span className={g.dot} aria-hidden="true" />
         <span>
-          Updated <time dateTime={GUIDES_UPDATED}>{guideDate(GUIDES_UPDATED)}</time>
+          Updated <time dateTime={guideUpdated(guide)}>{guideDate(guideUpdated(guide))}</time>
         </span>
         <span className={g.dot} aria-hidden="true" />
         <span>{readingMinutes(guide)} min read</span>

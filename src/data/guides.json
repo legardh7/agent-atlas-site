@@ -658,9 +658,21 @@
    "order": 4,
    "group": "personal",
    "groupName": "Personal agents",
-   "dek": "xAI's Grok Bot works from hosted computers in Cursor's cloud and signs its requests, though xAI documents little of it.",
-   "answer": "You detect Grok Bot by verifying the cryptographic signature on its requests, because Cloudflare Radar lists it as a signed agent with a published key directory while xAI's own docs print no user agent string or IP list for the hosted computers its Bots use. Verisoul verifies that signature and checks the cloud device and automated behavior behind it, while users who route traffic through their own desktop look like ordinary home browsing. Verisoul returns agent id grok_bot.",
+   "dek": "Grok Bot stopped signing requests in mid-October, has moved the mouse like a person since Oct 31 and uses the user's own IP, so only inference identifies it.",
+   "answer": "You detect Grok Bot by inference, combining its device fingerprint with its behavior, because it stopped signing its requests with Web Bot Auth in mid-October 2026, started imitating a person's mouse movement and clicks on Oct 31, and sends its cloud browser's traffic through a reverse proxy on the user's own device, so your site sees the user's IP. Its cloud browser still leaves device fingerprint tells and its sessions still carry behavioral tells under the human-like movement, which is how Verisoul names it as agent id grok_bot.",
    "body": [
+    {
+     "t": "p",
+     "text": "Updated Nov 3, 2026: Grok Bot has made three changes since mid-October that make it harder to detect, and this guide now reflects all of them."
+    },
+    {
+     "t": "ul",
+     "items": [
+      "Mid-October 2026: it stopped signing its requests with Web Bot Auth, so a signature check no longer identifies it",
+      "Oct 31, 2026: it started imitating a person's mouse movement and click patterns, so simple behavioral bot checks read it as human",
+      "It funnels its cloud browser's traffic through a reverse proxy on the user's own device, so your site sees the user's IP address, while Claude Duet, Meta Muse and ChatGPT Dots reach sites from IP addresses run by Anthropic, Meta and OpenAI"
+     ]
+    },
     {
      "t": "p",
      "text": "Grok Bot is xAI's always-on agent product. Each Bot is a persistent, named AI teammate that works on a cloud computer with a browser, terminal and files, signing in to the user's apps and websites to run multi-step jobs and routines. xAI, renamed SpaceXAI in July 2026, launched it in beta on Aug 11, 2026 for SuperGrok and Cursor paid plans, included it with all SuperGrok, Cursor Pro and Cursor Teams plans on Aug 26 and opened it to enterprises on Sep 3, when the waitlist ended."
@@ -682,7 +694,7 @@
     },
     {
      "t": "p",
-     "text": "Each member gets one microVM in Cursor's cloud in the US, shared by all of their Bots, with a browser, filesystem, terminal and persistent browser sessions. By default those computers leave through shared static egress IPs used by every Grok Bot customer, which xAI gives out only through its account team. Users can also turn on a setting called Route traffic through this computer, after which your site sees their desktop's connection instead of the hosted computer's IP."
+     "text": "Each member gets one microVM in Cursor's cloud in the US, shared by all of their Bots, with a browser, filesystem, terminal and persistent browser sessions. Grok Bot now funnels that browser's traffic through a reverse proxy on the user's own device, so your site sees the member's home or office IP address. That sets it apart from Claude Duet, Meta Muse and ChatGPT Dots, whose cloud browsers reach sites from IP addresses run by Anthropic, Meta and OpenAI, and it removes the datacenter IP hint sites used to rely on."
     },
     {
      "t": "p",
@@ -690,7 +702,7 @@
     },
     {
      "t": "p",
-     "text": "xAI's docs don't mention signing, while [Cloudflare Radar's bot directory](https://radar.cloudflare.com/bots/directory/grok-bot) lists Grok Bot as a signed agent with a published Web Bot Auth key directory under a GrokAgent user agent pattern. That gives sites a way to verify Grok Bot cryptographically, and sites behind Cloudflare can act on the signed identity directly."
+     "text": "Grok Bot used to sign its requests, and [Cloudflare Radar's bot directory](https://radar.cloudflare.com/bots/directory/grok-bot) lists it as a signed agent with a published Web Bot Auth key directory under a GrokAgent user agent pattern. It stopped signing in mid-October 2026, so signed-agent verification, including Cloudflare's, no longer names a Grok Bot session."
     },
     {
      "t": "table",
@@ -701,15 +713,19 @@
      "rows": [
       [
        "User agent",
-       "Not documented by xAI, Cloudflare Radar lists a GrokAgent pattern"
+       "Not documented by xAI (Cloudflare Radar lists a GrokAgent pattern from its signed period)"
       ],
       [
        "Web Bot Auth signature",
-       "Signed agent on Cloudflare Radar, verified by Verisoul"
+       "Stopped signing in mid-October 2026"
       ],
       [
-       "IP ranges",
-       "Shared static IPs, only via the account team"
+       "IP address",
+       "The user's own IP, through a reverse proxy on their device"
+      ],
+      [
+       "Mouse and clicks",
+       "Imitates a person's movement and click patterns since Oct 31, 2026"
       ],
       [
        "robots.txt",
@@ -719,15 +735,15 @@
     },
     {
      "t": "h2",
-     "text": "Why Grok Bot is medium hard to detect"
+     "text": "Why Grok Bot is now hard to detect"
     },
     {
      "t": "p",
-     "text": "A verified signature is the strongest identity signal an agent can send, because it can't be copied the way a user agent can. When Grok Bot's requests carry one, naming the session is reliable. The difficulty is that xAI documents so little around it: no published user agent, no public IP file and no robots.txt token, so teams without signature verification have only datacenter IP hints to go on."
+     "text": "Each of the three changes removes a check sites used to rely on. With the signature gone there is no cryptographic proof of who operated the session, with traffic arriving from the member's own IP there is no datacenter address to flag, and since Oct 31 its human-like mouse movement passes simple behavioral bot checks. Grok Bot is now the clearest case of an agent working to look like a person, while ChatGPT Dots, Claude Duet and Google's agents identify themselves."
     },
     {
      "t": "p",
-     "text": "Desktop routing makes it harder again, since a Bot sending traffic through the user's own computer arrives from a residential connection. Name confusion adds noise too. Grok Bot the agent is different from GrokBot and xAI-SearchBot, which are xAI's crawler names, and a rule written for one will not cover the other."
+     "text": "Name confusion adds noise too. Grok Bot the agent is different from GrokBot and xAI-SearchBot, which are xAI's crawler names, and a rule written for one will not cover the other."
     },
     {
      "t": "h2",
@@ -735,7 +751,7 @@
     },
     {
      "t": "p",
-     "text": "Verisoul verifies the signed request cryptographically against the provider's key, then checks that the browser is cloud hosted with a virtual machine device profile and that clicks, typing and page flow are automated. A signature tells you who operated the request, and the device and behavior checks confirm the session matches it."
+     "text": "Verisoul identifies Grok Bot by inference, combining device fingerprints with behavioral signals. Its cloud VM browser still leaves device fingerprint tells even when its traffic comes through the member's own connection, and its human-like mouse movement still carries the behavioral signature of an automated agent, so Verisoul combines the two to name the session."
     },
     {
      "t": "code"
@@ -745,21 +761,21 @@
      "items": [
       "`id` is `grok_bot`, the name for xAI's agent, separate from xAI's crawlers",
       "`type` is `ai_assistant`, an agent acting as one signed-in member",
-      "`detection_method` is `signed`, meaning a verified signature identified the operator",
-      "`detection_signals` lists `cryptographic`, `device` and `behavioral`"
+      "`detection_method` is `inferred`, meaning Verisoul identified it from the session itself, since Grok Bot sends no signature",
+      "`detection_signals` lists the signals behind the call, with device and behavioral carrying the decision for Grok Bot"
      ]
     },
     {
      "t": "p",
-     "text": "The [Agent Atlas entry for Grok Bot](https://www.verisoul.ai/agents/grok-bot) has the sample response, and the [AI agent detection docs](https://docs.verisoul.ai) explain signed detection."
+     "text": "The [Agent Atlas entry for Grok Bot](https://www.verisoul.ai/agents/grok-bot) has the sample response, and the [AI agent detection docs](https://docs.verisoul.ai) explain inferred detection."
     },
     {
      "t": "flow",
      "steps": [
       "User assigns a task to a Bot",
-      "Bot's cloud computer opens your site",
-      "It signs in as the member",
-      "Your login sees a signed cloud browser"
+      "Its cloud browser opens your site through a proxy on the user's device",
+      "It signs in as the member, moving the mouse like a person",
+      "Your login sees the member's own IP and an unsigned browser"
      ]
     },
     {
@@ -771,7 +787,7 @@
      "items": [
       "Add Verisoul to login, checkout and account settings so each session returns an agent field and bot score",
       "Match `agent.id` equal to `grok_bot` and keep separate rules for xAI's crawlers",
-      "Allow verified `grok_bot` sessions on everyday pages, and use bot score for routed sessions Verisoul can't name",
+      "Treat `grok_bot` sessions as the member acting through an agent on everyday pages, and use bot score for sessions Verisoul can't name",
       "Watch checkouts and payout changes closely, since a Vault card can fill at checkout without per-purchase approval"
      ]
     },
@@ -781,7 +797,7 @@
     },
     {
      "t": "p",
-     "text": "Grok Bot acts as the signed-in member, so most teams allow verified sessions to work in the account the way that member would. Blocking them mostly breaks workflows for paying customers who chose to delegate."
+     "text": "Grok Bot acts as the signed-in member, so most teams let identified sessions work in the account the way that member would, since blocking them mostly breaks workflows for paying customers who chose to delegate. Its move away from signing and toward human-like movement is a reason to check it at every sensitive step."
     },
     {
      "t": "p",
@@ -793,16 +809,24 @@
    ],
    "faq": [
     {
+     "q": "Does Grok Bot still sign its requests with Web Bot Auth?",
+     "a": "No. Grok Bot stopped signing its requests with Web Bot Auth in mid-October 2026, so signature checks no longer identify it. Verisoul now identifies it by inference from device fingerprints and behavior, and returns it as grok_bot with detection_method inferred."
+    },
+    {
      "q": "Can you block Grok Bot with robots.txt?",
-     "a": "xAI doesn't document a robots.txt token for Grok Bot. To control it, write a rule on its verified signature or on a detection label such as Verisoul's grok_bot."
+     "a": "xAI doesn't document a robots.txt token for Grok Bot, and it no longer signs its requests, so write rules on a detection label such as Verisoul's grok_bot."
     },
     {
      "q": "What is the difference between Grok Bot and GrokBot?",
      "a": "Grok Bot is xAI's always-on agent that signs in and works inside web apps for a person. GrokBot and xAI-SearchBot are crawler names, so keep separate rules for each."
     },
     {
+     "q": "Does Grok Bot try to look like a person?",
+     "a": "Yes. Since Oct 31, 2026 it imitates a person's mouse movement and click patterns, and it reaches sites from the user's own IP. Its cloud browser and its sessions still leave automated tells, which is why Verisoul combines device fingerprints with behavior to name it."
+    },
+    {
      "q": "What IP addresses does Grok Bot use?",
-     "a": "By default it uses static egress IPs in Cursor's cloud that all Grok Bot customers share, and xAI gives them out only through the account team. Users can also route traffic through their own desktop, which shows their home IP."
+     "a": "Your users' own. Grok Bot funnels its cloud browser's traffic through a reverse proxy on the user's device, so sessions arrive from the member's home or office IP, while Claude Duet, Meta Muse and ChatGPT Dots come from IP addresses run by Anthropic, Meta and OpenAI. xAI's docs also describe shared static egress IPs that it hands out only through its account team, so IP lists catch little of it."
     },
     {
      "q": "Does Grok Bot get through CAPTCHAs?",
@@ -835,7 +859,7 @@
      "url": "https://x.ai/news/grok-bot-more-plans"
     },
     {
-     "title": "Grok Bot, Cloudflare Radar bots directory",
+     "title": "Grok Bot, Cloudflare Radar bots directory (its former signed status)",
      "url": "https://radar.cloudflare.com/bots/directory/grok-bot"
     },
     {
@@ -859,12 +883,13 @@
     "full": true
    },
    "flags": [
-    "Signed status and the GrokAgent user agent pattern now cite Cloudflare Radar's Grok Bot entry, but research could not load that page and the listing came to us via a third party; open the Radar page and confirm both before publishing",
-    "Dropped the X Premium $30 plan detail (third-party tracker)",
+    "Nov 3, 2026 update (from Henry, Verisoul network observations): stopped Web Bot Auth signing mid-October, human-like mouse and clicks since Oct 31, reverse proxy through the user's device. Detection is now inferred from device plus behavior",
+    "Cloudflare Radar may still list Grok Bot as signed; the page describes that listing as its former signed status",
     "Grok Bot not in the Verisoul share data, so no numbers given"
    ],
    "slug": "grok-bot",
-   "standalone": null
+   "standalone": null,
+   "updated": "2026-11-03"
   },
   {
    "guide": "instinct",

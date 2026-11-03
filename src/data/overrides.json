@@ -1,5 +1,5 @@
 {
-  "_note": "Applied on top of agents.json at load time, so a data refresh from the kit keeps these. growing: slugs whose commonality is Growing. extraAgents: agents the API returns that the kit does not have yet. aliases: extra names added to an agent (searchable and shown on its page).",
+  "_note": "Applied on top of agents.json at load time, so a data refresh from the kit keeps these. growing: slugs whose commonality is Growing. extraAgents: agents the API returns that the kit does not have yet. aliases: extra names added to an agent (searchable and shown on its page). signalsOff: signal cards to leave off an agent's page when they no longer apply (the API block still mirrors the API).",
   "growing": [
     "instinct",
     "meta-muse",
@@ -40,6 +40,11 @@
     "chatgpt-agent": [
       "ChatGPT Dots",
       "Dots"
+    ]
+  },
+  "signalsOff": {
+    "grok-bot": [
+      "network"
     ]
   }
 }
