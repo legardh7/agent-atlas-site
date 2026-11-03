@@ -50,6 +50,8 @@ export interface Guide {
   flags: string[];
   /** null when the guide sits on an existing Atlas entry */
   standalone: Standalone | null;
+  /** Date this guide was last revised, when later than the shared GUIDES_UPDATED date (YYYY-MM-DD) */
+  updated?: string;
 }
 
 interface GuideData {
@@ -68,6 +70,11 @@ export const GUIDE_GROUPS: { id: string; name: string }[] = GUIDES.reduce<{ id: 
   if (!acc.some((x) => x.id === g.group)) acc.push({ id: g.group, name: g.groupName });
   return acc;
 }, []);
+
+/** When a guide was last revised: its own date if it has one, else the shared date */
+export function guideUpdated(g: Guide): string {
+  return g.updated ?? GUIDES_UPDATED;
+}
 
 export function getGuide(slug: string): Guide | undefined {
   return GUIDES.find((g) => g.slug === slug);

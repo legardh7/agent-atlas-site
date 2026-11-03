@@ -96,6 +96,8 @@ function normalize(a: Agent): Agent {
   if (a.type === "Headless automation") on.add("device");
   // Device covers the browser and device, including the user agent: an agent that names itself there lights it
   if (a.declaresUserAgent || a.method === "Self-declared") on.add("device");
+  // Signals that don't apply to this agent, e.g. network for an agent that routes through the user's own IP
+  for (const k of ((overrides as { signalsOff?: Record<string, SignalKey[]> }).signalsOff?.[a.slug] ?? [])) on.delete(k);
   const keys: SignalKey[] = ["cryptographic", "network", "device", "behavior"];
   const signals = Object.fromEntries(keys.map((k) => [k, on.has(k)])) as Record<SignalKey, boolean>;
   const signalDetails: Partial<Record<SignalKey, string>> = {};
