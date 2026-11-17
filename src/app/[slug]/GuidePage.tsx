@@ -6,6 +6,9 @@ import { ApiBlock } from "@/components/ApiBlock";
 import { CopyButton } from "@/components/CopyButton";
 import { GuideBody, headingId, inline } from "@/components/guide/GuideBody";
 import { GuideLogo } from "@/components/guide/GuideLogo";
+import { JsonLd } from "@/components/JsonLd";
+import { article, breadcrumbs, faqPage, graph, webPage } from "@/lib/schema";
+import { fitDescription } from "@/lib/seo";
 import {
   SIGNALS,
   agentsFromProvider,
@@ -17,7 +20,7 @@ import {
   type Method,
   type SignalKey,
 } from "@/lib/atlas";
-import { GUIDES, GUIDES_UPDATED, guideMembers, guideName, guideUpdated, readingMinutes, type Guide } from "@/lib/guides";
+import { GUIDES, guideMembers, guideName, guideUpdated, readingMinutes, type Guide } from "@/lib/guides";
 import { lookAlikes } from "@/lib/detection";
 import type { IconName } from "@/lib/icons";
 import { SITE, abs } from "@/lib/site";
@@ -97,42 +100,26 @@ export function GuidePage({ guide, agent }: { guide: Guide; agent: Agent | null 
   const toc = guide.body.filter((b): b is { t: "h2"; text: string } => b.t === "h2");
   const url = abs(`/${guide.slug}`);
   const headline = `How to detect ${name}`;
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@graph": [
-      {
-        "@type": "TechArticle",
-        headline,
-        description: plain(guide.dek),
-        abstract: plain(guide.answer),
-        datePublished: GUIDES_UPDATED,
-        dateModified: guideUpdated(guide),
-        author: { "@type": "Organization", name: "Verisoul Research", url: SITE.links.home },
-        publisher: { "@type": "Organization", name: "Verisoul", url: SITE.links.home },
-        mainEntityOfPage: url,
-        url,
-        about: name,
-        ...(guide.shots[0] ? { image: `${SITE.url}${guide.shots[0].src}` } : {}),
-        citation: guide.sources.map((x) => x.url),
-      },
-      {
-        "@type": "FAQPage",
-        mainEntity: faq.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: plain(f.a) } })),
-      },
-      {
-        "@type": "BreadcrumbList",
-        itemListElement: [
-          { "@type": "ListItem", position: 1, name: "Verisoul", item: SITE.links.home },
-          { "@type": "ListItem", position: 2, name: "Agent Atlas", item: abs("/") },
-          { "@type": "ListItem", position: 3, name, item: url },
-        ],
-      },
-    ],
-  };
+  const jsonLd = graph(
+    webPage({ url, name: headline, description: fitDescription(plain(guide.dek)), dateModified: guideUpdated(guide) }),
+    breadcrumbs(url, [{ name, url }]),
+    article({
+      url,
+      headline,
+      description: plain(guide.dek),
+      abstract: plain(guide.answer),
+      about: name,
+      datePublished: guide.published,
+      dateModified: guideUpdated(guide),
+      image: guide.shots[0] ? `${SITE.url}${guide.shots[0].src}` : undefined,
+      citations: guide.sources.map((x) => x.url),
+    }),
+    faqPage(url, faq.map((f) => ({ q: f.q, a: plain(f.a) }))),
+  );
 
   return (
     <main className={`container ${styles.page}`}>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }} />
+      <JsonLd data={jsonLd} />
       <Link href="/" className={styles.back}>
         <Icon name="arrowLeft" size={16} strokeWidth={2} />
         All agents

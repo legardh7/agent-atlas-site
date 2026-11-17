@@ -9,6 +9,7 @@ Agent Atlas is Verisoul's public directory of every AI agent, crawler and automa
 | `src/data/agents.json` | The data every page reads. Generated, so do not edit by hand |
 | `scripts/build-data.py` | Turns the Agent Atlas kit's data file into `src/data/agents.json` |
 | `src/lib/site.ts` | Site name, public URL and every outbound link |
+| `src/lib/schema.ts` | Structured data (schema.org) for every page: Verisoul, the site, each page and its breadcrumbs, defined once |
 | `src/lib/atlas.ts` | Labels and descriptions for types, methods, signals and commonality levels |
 | `src/app` | Pages, social images, sitemap, robots file and the JSON API |
 | `public/verisoul-logo.png` | Logo used in the header and on the social card |

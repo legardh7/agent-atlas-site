@@ -244,7 +244,8 @@
     "Mac computer use: we have not characterized how Muse's Mac mode looks on websites, so the post doesn't claim either way"
    ],
    "slug": "meta-muse",
-   "standalone": null
+   "standalone": null,
+   "published": "2026-11-01"
   },
   {
    "guide": "chatgpt-dots",
@@ -450,7 +451,8 @@
    ],
    "slug": "chatgpt-agent",
    "standalone": null,
-   "displayName": "ChatGPT Dots"
+   "displayName": "ChatGPT Dots",
+   "published": "2026-11-01"
   },
   {
    "guide": "claude-duet",
@@ -651,7 +653,8 @@
     "No Cloudflare fact added: research has no signed-agent or Radar entry for Duet"
    ],
    "slug": "claude-duet",
-   "standalone": null
+   "standalone": null,
+   "published": "2026-11-01"
   },
   {
    "guide": "grok-bot",
@@ -889,6 +892,7 @@
    ],
    "slug": "grok-bot",
    "standalone": null,
+   "published": "2026-11-01",
    "updated": "2026-11-03"
   },
   {
@@ -1088,7 +1092,8 @@
     "Dropped all Known Agents facts (user agent hint, robots.txt expectation)"
    ],
    "slug": "instinct",
-   "standalone": null
+   "standalone": null,
+   "published": "2026-11-01"
   },
   {
    "guide": "hark",
@@ -1286,7 +1291,8 @@
     "Screenshot removed per v3"
    ],
    "slug": "harkbot",
-   "standalone": null
+   "standalone": null,
+   "published": "2026-11-01"
   },
   {
    "guide": "gemini-agent",
@@ -1479,7 +1485,8 @@
     "Screenshot removed per v3"
    ],
    "slug": "google-agent",
-   "standalone": null
+   "standalone": null,
+   "published": "2026-11-01"
   },
   {
    "guide": "perplexity-computer",
@@ -1699,7 +1706,8 @@
     "members": [
      "perplexity-user"
     ]
-   }
+   },
+   "published": "2026-11-01"
   },
   {
    "guide": "manus",
@@ -1910,7 +1918,8 @@
     "No Verisoul volume for manus_bot in the Oct 29 to Nov 1 window, so no Verisoul numbers are used"
    ],
    "slug": "manus-bot",
-   "standalone": null
+   "standalone": null,
+   "published": "2026-11-01"
   },
   {
    "guide": "chatgpt-atlas",
@@ -2110,7 +2119,8 @@
     "members": [
      "chatgpt-agent"
     ]
-   }
+   },
+   "published": "2026-11-01"
   },
   {
    "guide": "perplexity-comet",
@@ -2316,7 +2326,8 @@
      "network": "Traffic comes from the user's own IP, so the network looks like a normal visitor"
     },
     "members": []
-   }
+   },
+   "published": "2026-11-01"
   },
   {
    "guide": "chrome-auto-browse",
@@ -2518,7 +2529,8 @@
     "members": [
      "google-agent"
     ]
-   }
+   },
+   "published": "2026-11-01"
   },
   {
    "guide": "claude-in-chrome",
@@ -2716,7 +2728,8 @@
     "members": [
      "claude-desktop"
     ]
-   }
+   },
+   "published": "2026-11-01"
   },
   {
    "guide": "copilot-edge",
@@ -2917,7 +2930,8 @@
      "network": "Traffic comes from the user's own IP, so the network looks like a normal visitor"
     },
     "members": []
-   }
+   },
+   "published": "2026-11-01"
   },
   {
    "guide": "opera-neon",
@@ -3119,7 +3133,8 @@
      "network": "Local and MCP sessions come from the user's own IP, so the network looks like a normal visitor"
     },
     "members": []
-   }
+   },
+   "published": "2026-11-01"
   },
   {
    "guide": "dia",
@@ -3317,7 +3332,8 @@
      "network": "Traffic comes from the user's own IP, so the network looks like a normal visitor"
     },
     "members": []
-   }
+   },
+   "published": "2026-11-01"
   },
   {
    "guide": "openclaw",
@@ -3535,7 +3551,8 @@
      "cdp-automation",
      "headless-chrome"
     ]
-   }
+   },
+   "published": "2026-11-01"
   },
   {
    "guide": "browser-use",
@@ -3739,7 +3756,8 @@
     "members": [
      "cdp-automation"
     ]
-   }
+   },
+   "published": "2026-11-01"
   },
   {
    "guide": "hermes-agent",
@@ -3962,7 +3980,8 @@
      "cdp-automation",
      "browserbase"
     ]
-   }
+   },
+   "published": "2026-11-01"
   },
   {
    "guide": "computer-use-apis",
@@ -4171,7 +4190,8 @@
      "headless-chrome",
      "webdriver"
     ]
-   }
+   },
+   "published": "2026-11-01"
   },
   {
    "guide": "browserbase",
@@ -4368,7 +4388,8 @@
     "Oct 2025 Gemini CAPTCHA story in FAQ rests on Simon Willison's post, which was dropped from sources to keep the list at 7"
    ],
    "slug": "browserbase",
-   "standalone": null
+   "standalone": null,
+   "published": "2026-11-01"
   },
   {
    "guide": "hyperbrowser",
@@ -4563,7 +4584,8 @@
     "Not confirmed whether Hyperbrowser is on Cloudflare's signed agents list (Radar page did not load during research)"
    ],
    "slug": "hyperbrowser",
-   "standalone": null
+   "standalone": null,
+   "published": "2026-11-01"
   },
   {
    "guide": "anchor-browser",
@@ -4760,7 +4782,8 @@
     "SiliconANGLE (Groq customer, funding) is not on the brief's mainstream-press list"
    ],
    "slug": "anchor-browser",
-   "standalone": null
+   "standalone": null,
+   "published": "2026-11-01"
   },
   {
    "guide": "puppeteer",
@@ -4959,7 +4982,8 @@
      "headless-chrome",
      "cdp-automation"
     ]
-   }
+   },
+   "published": "2026-11-01"
   },
   {
    "guide": "playwright",
@@ -5164,7 +5188,8 @@
     "members": [
      "cdp-automation"
     ]
-   }
+   },
+   "published": "2026-11-01"
   },
   {
    "guide": "selenium",
@@ -5358,7 +5383,8 @@
     "members": [
      "webdriver"
     ]
-   }
+   },
+   "published": "2026-11-01"
   },
   {
    "guide": "openai-bots",
@@ -5561,7 +5587,8 @@
      "oai-adsbot",
      "chatgpt-agent"
     ]
-   }
+   },
+   "published": "2026-11-01"
   },
   {
    "guide": "anthropic-bots",
@@ -5767,7 +5794,8 @@
      "claude-user",
      "claude-duet"
     ]
-   }
+   },
+   "published": "2026-11-01"
   },
   {
    "guide": "google-bots",
@@ -5973,7 +6001,8 @@
      "google-notebooklm",
      "googlebot"
     ]
-   }
+   },
+   "published": "2026-11-01"
   },
   {
    "guide": "perplexity-bots",
@@ -6189,7 +6218,8 @@
      "perplexitybot",
      "perplexity-user"
     ]
-   }
+   },
+   "published": "2026-11-01"
   },
   {
    "guide": "xai-bots",
@@ -6384,7 +6414,8 @@
     "members": [
      "grok-bot"
     ]
-   }
+   },
+   "published": "2026-11-01"
   },
   {
    "guide": "meta-bots",
@@ -6589,7 +6620,8 @@
      "meta-externalads",
      "meta-muse"
     ]
-   }
+   },
+   "published": "2026-11-01"
   }
  ]
 }
