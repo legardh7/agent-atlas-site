@@ -50,6 +50,8 @@ export interface Guide {
   flags: string[];
   /** null when the guide sits on an existing Atlas entry */
   standalone: Standalone | null;
+  /** Date this guide first went live (YYYY-MM-DD). Set once; never bump it on a data refresh */
+  published: string;
   /** Date this guide was last revised, when later than the shared GUIDES_UPDATED date (YYYY-MM-DD) */
   updated?: string;
 }

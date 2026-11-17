@@ -7,6 +7,8 @@ import { ApiBlock } from "@/components/ApiBlock";
 import { AGENTS, SIGNALS, apiAgent, agentsFromProvider, getAgent, similarAgents, typePluralLower, levelInfo, methodInfo, typeInfo, type Agent, type SignalKey } from "@/lib/atlas";
 import { SITE, abs } from "@/lib/site";
 import { fitDescription, fitTitle, namedDescription } from "@/lib/seo";
+import { breadcrumbs, faqPage, graph, webPage } from "@/lib/schema";
+import { JsonLd } from "@/components/JsonLd";
 import { canBeFaked, howCommon, howToDetect, identifiesItself, lookAlikes, whatItIs } from "@/lib/detection";
 import { STANDALONE_GUIDES, getGuide, guideName } from "@/lib/guides";
 import { GuidePage, plain } from "./GuidePage";
@@ -44,17 +46,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     };
   }
   if (!agent) return {};
-  const description = fitDescription(`${namedDescription(agent.name, agent.description)} ${howWeKnow(agent)}`);
+  const description = agentDescription(agent);
   const url = abs(`/${agent.slug}`);
   return {
-    title: {
-      absolute: fitTitle([
-        `${agent.name}: what it is and how to detect it | Verisoul`,
-        `${agent.name}: what it is and how to detect it`,
-        `How to detect ${agent.name} | Verisoul`,
-        `How to detect ${agent.name}`,
-      ]),
-    },
+    title: { absolute: agentTitle(agent) },
     description,
     alternates: { canonical: url },
     // Entries without a full detection guide stay out of Google's index (thin, templated pages) while
@@ -101,27 +96,16 @@ export default async function AgentPage({ params }: Props) {
       a: `Every session Verisoul identifies as ${name} carries an agent block with id "${agent.id}", name, provider, type "${apiAgent(agent).type}", detection_method "${apiAgent(agent).detection_method}" and the detection_signals used (${apiAgent(agent).detection_signals.join(", ")}). Build rules on the id, type and detection method.`,
     },
   ];
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@graph": [
-      {
-        "@type": "FAQPage",
-        mainEntity: faq.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })),
-      },
-      {
-        "@type": "BreadcrumbList",
-        itemListElement: [
-          { "@type": "ListItem", position: 1, name: "Verisoul", item: SITE.links.home },
-          { "@type": "ListItem", position: 2, name: "Agent Atlas", item: abs("/") },
-          { "@type": "ListItem", position: 3, name, item: abs(`/${agent.slug}`) },
-        ],
-      },
-    ],
-  };
+  const url = abs(`/${agent.slug}`);
+  const jsonLd = graph(
+    webPage({ url, name: agentTitle(agent), description: agentDescription(agent) }),
+    breadcrumbs(url, [{ name, url }]),
+    faqPage(url, faq),
+  );
 
   return (
     <main className={`container ${styles.page}`}>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }} />
+      <JsonLd data={jsonLd} />
       <Link href="/" className={styles.back}>
         <Icon name="arrowLeft" size={16} strokeWidth={2} />
         All agents
@@ -393,6 +377,21 @@ function methodIntro(agent: Agent): string {
 }
 
 /** One sentence for the meta description on how Verisoul identifies the agent */
+/** The agent page's title, shared by the <title> tag and the structured data */
+function agentTitle(agent: Agent): string {
+  return fitTitle([
+    `${agent.name}: what it is and how to detect it | Verisoul`,
+    `${agent.name}: what it is and how to detect it`,
+    `How to detect ${agent.name} | Verisoul`,
+    `How to detect ${agent.name}`,
+  ]);
+}
+
+/** The agent page's description, shared by the meta description and the structured data */
+function agentDescription(agent: Agent): string {
+  return fitDescription(`${namedDescription(agent.name, agent.description)} ${howWeKnow(agent)}`);
+}
+
 function howWeKnow(agent: Agent): string {
   const used = (["network", "device", "behavior"] as SignalKey[]).filter((k) => agent.signals[k]);
   const list = joinWords(used.map((k) => SIGNALS.find((s) => s.key === k)!.label.toLowerCase()));

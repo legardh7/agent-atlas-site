@@ -21,6 +21,13 @@ export const SITE = {
     signedAgents: "https://docs.verisoul.ai/signals-scores/agent-detection",
     api: "https://docs.verisoul.ai/signals-scores/agent-detection",
   },
+  /** Verisoul's official profiles; listed as sameAs in the structured data (src/lib/schema.ts) */
+  profiles: [
+    "https://www.linkedin.com/company/verisoul-stops-fake-accounts",
+    "https://github.com/verisoul",
+    "https://www.youtube.com/channel/UCFZMVm8pLG3xZYuJ_dEHATA",
+    "https://www.crunchbase.com/organization/verisoul",
+  ],
 };
 
 /** A file in /public, with the mount path in front (for plain <img> tags) */
